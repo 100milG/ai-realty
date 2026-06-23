@@ -1,0 +1,7 @@
+node_modules
+node_modules_temp
+dist
+.env
+.DS_Store
+/guidelines
+!.env.example
