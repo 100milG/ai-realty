@@ -11,7 +11,7 @@ const PORT = process.env.PORT || 5000;
 
 // Enable CORS (Cross-Origin Resource Sharing) so our React app can call this API
 app.use(cors({
-  origin: ['https://ai-realty-platform-two.vercel.app', 'http://localhost:5173', 'http://localhost:5174'],
+  origin: ['https://ai-realty-ivory.vercel.app', 'http://localhost:5173', 'http://localhost:5174'],
   credentials: true
 }));
 
