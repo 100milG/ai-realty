@@ -29,7 +29,7 @@ export function KYCVerification() {
     async function loadKYCDetails() {
       setLoading(true);
       try {
-        const res = await fetch("/api/kyc", {
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/kyc`, {
           headers: {
             "Authorization": `Bearer ${token}`
           }
@@ -82,7 +82,7 @@ export function KYCVerification() {
 
     setSubmitting(true);
     try {
-      const res = await fetch("/api/kyc", {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/kyc`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

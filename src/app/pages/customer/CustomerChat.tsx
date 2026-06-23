@@ -49,7 +49,7 @@ export function CustomerChat() {
       setLoading(true);
       try {
         // Fetch all leads
-        const leadsRes = await fetch("/api/leads", {
+        const leadsRes = await fetch(`${import.meta.env.VITE_API_URL}/leads`, {
           headers: {
             "Authorization": `Bearer ${token}`
           }
@@ -66,7 +66,7 @@ export function CustomerChat() {
           return;
         }
 
-        const sessionRes = await fetch(`/api/messages/lead/${leadId}`, {
+        const sessionRes = await fetch(`${import.meta.env.VITE_API_URL}/messages/lead/${leadId}`, {
           headers: {
             "Authorization": `Bearer ${token}`
           }
@@ -76,7 +76,7 @@ export function CustomerChat() {
           setSession(sessionData.session);
           setLead(sessionData.lead);
 
-          const messagesRes = await fetch(`/api/messages/${sessionData.session.id}`, {
+          const messagesRes = await fetch(`${import.meta.env.VITE_API_URL}/messages/${sessionData.session.id}`, {
             headers: {
               "Authorization": `Bearer ${token}`
             }
@@ -102,7 +102,7 @@ export function CustomerChat() {
 
     const interval = setInterval(async () => {
       try {
-        const res = await fetch(`/api/messages/${session.id}`, {
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/messages/${session.id}`, {
           headers: {
             "Authorization": `Bearer ${token}`
           }
@@ -126,7 +126,7 @@ export function CustomerChat() {
     setInput("");
 
     try {
-      const res = await fetch("/api/messages", {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/messages`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

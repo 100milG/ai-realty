@@ -30,7 +30,7 @@ export function PropertyManagement() {
     }
     setLoading(true);
     try {
-      const res = await fetch("/api/properties?myListings=true&status=all", {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/properties?myListings=true&status=all`, {
         headers: {
           "Authorization": `Bearer ${token}`
         }
@@ -56,7 +56,7 @@ export function PropertyManagement() {
     }
 
     try {
-      const res = await fetch(`/api/properties/${id}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/properties/${id}`, {
         method: "DELETE",
         headers: {
           "Authorization": `Bearer ${token}`

@@ -69,7 +69,7 @@ export function CustomerLanding() {
   useEffect(() => {
     async function fetchProperties() {
       try {
-        const res = await fetch("/api/properties");
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/properties`);
         if (res.ok) {
           const data = await res.json();
           setProperties(data.slice(0, 3));

@@ -40,7 +40,7 @@ export function AdminDashboard() {
     async function loadStats() {
       setLoading(true);
       try {
-        const res = await fetch("/api/admin/stats", {
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/admin/stats`, {
           headers: {
             "Authorization": `Bearer ${token}`
           }

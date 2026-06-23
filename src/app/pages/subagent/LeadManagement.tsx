@@ -17,7 +17,7 @@ export function LeadManagement() {
     setLoading(true);
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch("/api/leads", {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/leads`, {
         headers: {
           "Authorization": `Bearer ${token}`
         }
@@ -67,7 +67,7 @@ export function LeadManagement() {
   const handleStatusChange = async (leadId: string, newStatus: string) => {
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch(`/api/leads/${leadId}/status`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/leads/${leadId}/status`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

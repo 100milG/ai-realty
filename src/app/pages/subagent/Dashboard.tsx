@@ -62,7 +62,7 @@ export function SubagentDashboard() {
       setLoading(true);
       try {
         // 1. Fetch subagent leads
-        const leadsRes = await fetch("/api/leads", {
+        const leadsRes = await fetch(`${import.meta.env.VITE_API_URL}/leads`, {
           headers: {
             "Authorization": `Bearer ${token}`
           }
@@ -73,7 +73,7 @@ export function SubagentDashboard() {
         }
 
         // 2. Fetch only subagent properties directly
-        const propertiesRes = await fetch("/api/properties?myListings=true&status=all", {
+        const propertiesRes = await fetch(`${import.meta.env.VITE_API_URL}/properties?myListings=true&status=all`, {
           headers: {
             "Authorization": `Bearer ${token}`
           }

@@ -27,7 +27,7 @@ export function LeadVisibility() {
   const loadLeads = async () => {
     setLoading(true);
     try {
-      const res = await fetch("/api/leads", {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/leads`, {
         headers: {
           "Authorization": `Bearer ${token}`
         }

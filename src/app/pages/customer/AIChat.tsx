@@ -48,7 +48,7 @@ export function AIChat() {
   useEffect(() => {
     async function loadProperties() {
       try {
-        const res = await fetch("/api/properties?status=ACTIVE");
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/properties?status=ACTIVE`);
         if (res.ok) {
           const data = await res.json();
           setDbProperties(data);

@@ -27,7 +27,7 @@ export function Profile() {
     async function loadProfile() {
       setLoading(true);
       try {
-        const res = await fetch("/api/auth/profile", {
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/auth/profile`, {
           headers: {
             "Authorization": `Bearer ${token}`
           }
@@ -61,7 +61,7 @@ export function Profile() {
 
     setSubmitting(true);
     try {
-      const res = await fetch("/api/auth/profile", {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/auth/profile`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

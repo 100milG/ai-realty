@@ -41,7 +41,7 @@ export function AddProperty() {
   useEffect(() => {
     async function loadConfigData() {
       try {
-        const amRes = await fetch("/api/properties/amenities/all");
+        const amRes = await fetch(`${import.meta.env.VITE_API_URL}/properties/amenities/all`);
         if (amRes.ok) {
           const amData = await amRes.json();
           setAmenitiesList(amData);
@@ -57,7 +57,7 @@ export function AddProperty() {
     if (isEdit && id) {
       async function loadPropertyToEdit() {
         try {
-          const res = await fetch(`/api/properties/${id}`);
+          const res = await fetch(`${import.meta.env.VITE_API_URL}/properties/${id}`);
           if (res.ok) {
             const data = await res.json();
             setFormData({
@@ -173,7 +173,7 @@ export function AddProperty() {
 
     try {
       const token = localStorage.getItem("token");
-      const url = isEdit ? `/api/properties/${id}` : "/api/properties";
+      const url = isEdit ? `${import.meta.env.VITE_API_URL}/properties/${id}` : `${import.meta.env.VITE_API_URL}/properties`;
       const method = isEdit ? "PUT" : "POST";
 
       const res = await fetch(url, {

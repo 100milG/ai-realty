@@ -41,7 +41,7 @@ export function PropertyDetails() {
     async function loadPropertyDetails() {
       setLoading(true);
       try {
-        const res = await fetch(`/api/properties/${id}`);
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/properties/${id}`);
         if (res.ok) {
           const data = await res.json();
           setProperty(data);
@@ -49,7 +49,7 @@ export function PropertyDetails() {
           // Check if this property is in user's saved list
           const token = localStorage.getItem("token");
           if (token) {
-            const savedRes = await fetch("/api/saved-properties", {
+            const savedRes = await fetch(`${import.meta.env.VITE_API_URL}/saved-properties`, {
               headers: { "Authorization": `Bearer ${token}` }
             });
             if (savedRes.ok) {
@@ -80,7 +80,7 @@ export function PropertyDetails() {
 
     try {
       if (saved) {
-        const res = await fetch(`/api/saved-properties/${id}`, {
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/saved-properties/${id}`, {
           method: "DELETE",
           headers: { "Authorization": `Bearer ${token}` }
         });
@@ -88,7 +88,7 @@ export function PropertyDetails() {
           setSaved(false);
         }
       } else {
-        const res = await fetch("/api/saved-properties", {
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/saved-properties`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -117,7 +117,7 @@ export function PropertyDetails() {
 
     setInterestSubmitting(true);
     try {
-      const res = await fetch("/api/leads", {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/leads`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -159,7 +159,7 @@ export function PropertyDetails() {
     const scheduledAt = new Date(`${visitDate}T${visitTime}`);
     setVisitSubmitting(true);
     try {
-      const res = await fetch("/api/visits", {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/visits`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -325,11 +325,14 @@ export function PropertyDetails() {
                 </div>
                 <div className="text-right">
                   <p className="text-3xl font-bold text-gray-900">{formattedPrice}</p>
-                  <Badge variant="info" size="sm" className="mt-2">
+                  <div className="mt-2">
+                    <Badge variant="info" size="sm">
                     {property.listingType === "RENT" ? "For Rent" : "For Sale"}
                   </Badge>
                 </div>
               </div>
+              </div>
+
 
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 py-4 border-t border-gray-200">
                 <div className="flex items-center space-x-2">
@@ -565,10 +568,12 @@ export function PropertyDetails() {
                   <p className="text-sm text-gray-600">Verified Agent</p>
                 </div>
               </div>
-              <Badge variant="success" size="sm" className="mb-3">
+              <div className="mb-3">
+                <Badge variant="success" size="sm">
                 <CheckCircle2 className="size-3 mr-1" />
                 Platform Verified
               </Badge>
+              </div>
               <p className="text-sm text-gray-600">
                 This agent is verified and monitored by our platform for quality and transparency.
               </p>

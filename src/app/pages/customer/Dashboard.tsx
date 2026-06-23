@@ -36,7 +36,7 @@ export function CustomerDashboard() {
       setLoading(true);
       try {
         // 1. Fetch leads
-        const leadsRes = await fetch("/api/leads", {
+        const leadsRes = await fetch(`${import.meta.env.VITE_API_URL}/leads`, {
           headers: {
             "Authorization": `Bearer ${token}`
           }
@@ -47,7 +47,7 @@ export function CustomerDashboard() {
         }
 
         // 2. Fetch saved properties
-        const savedRes = await fetch("/api/saved-properties", {
+        const savedRes = await fetch(`${import.meta.env.VITE_API_URL}/saved-properties`, {
           headers: {
             "Authorization": `Bearer ${token}`
           }
@@ -58,7 +58,7 @@ export function CustomerDashboard() {
         }
 
         // 3. Fetch active properties for recommendations
-        const propertiesRes = await fetch("/api/properties?status=ACTIVE");
+        const propertiesRes = await fetch(`${import.meta.env.VITE_API_URL}/properties?status=ACTIVE`);
         if (propertiesRes.ok) {
           const propertiesData = await propertiesRes.json();
           setProperties(propertiesData);

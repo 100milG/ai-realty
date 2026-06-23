@@ -18,7 +18,7 @@ export function SubagentApproval() {
   const loadRequests = async () => {
     setLoading(true);
     try {
-      const res = await fetch("/api/kyc", {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/kyc`, {
         headers: {
           "Authorization": `Bearer ${token}`
         }
@@ -45,7 +45,7 @@ export function SubagentApproval() {
   const handleApprove = async (requestId: string) => {
     setActioning(true);
     try {
-      const res = await fetch(`/api/kyc/${requestId}/status`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/kyc/${requestId}/status`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -81,7 +81,7 @@ export function SubagentApproval() {
     }
     setActioning(true);
     try {
-      const res = await fetch(`/api/kyc/${requestId}/status`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/kyc/${requestId}/status`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

@@ -16,7 +16,7 @@ export function ChatMonitoring() {
   const loadSessions = async () => {
     setLoading(true);
     try {
-      const res = await fetch("/api/messages/admin/monitor", {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/messages/admin/monitor`, {
         headers: {
           "Authorization": `Bearer ${token}`
         }

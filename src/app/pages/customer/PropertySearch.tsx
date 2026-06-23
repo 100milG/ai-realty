@@ -24,7 +24,7 @@ export function PropertySearch() {
         const queryParams = new URLSearchParams();
         queryParams.append("status", "ACTIVE");
         
-        const res = await fetch(`/api/properties?${queryParams.toString()}`);
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/properties?${queryParams.toString()}`);
         if (res.ok) {
           const data = await res.json();
           setAllProperties(data);

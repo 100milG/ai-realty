@@ -19,7 +19,7 @@ export function SavedProperties() {
     async function loadSavedProperties() {
       setLoading(true);
       try {
-        const res = await fetch("/api/saved-properties", {
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/saved-properties`, {
           headers: {
             "Authorization": `Bearer ${token}`
           }

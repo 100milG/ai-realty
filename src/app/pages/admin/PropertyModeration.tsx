@@ -16,11 +16,11 @@ export function PropertyModeration() {
   const loadProperties = async () => {
     setLoading(true);
     try {
-      let url = "/api/properties";
+      let url = `${import.meta.env.VITE_API_URL}/properties`;
       if (filter === "pending") {
-        url = "/api/properties?status=PENDING_APPROVAL";
+        url = `${import.meta.env.VITE_API_URL}/properties?status=PENDING_APPROVAL`;
       } else if (filter === "rejected") {
-        url = "/api/properties?status=REJECTED";
+        url = `${import.meta.env.VITE_API_URL}/properties?status=REJECTED`;
       }
       
       const res = await fetch(url, {
@@ -49,7 +49,7 @@ export function PropertyModeration() {
 
   const handleApprove = async (id: string) => {
     try {
-      const res = await fetch(`/api/properties/${id}/status`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/properties/${id}/status`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -73,7 +73,7 @@ export function PropertyModeration() {
 
   const handleReject = async (id: string) => {
     try {
-      const res = await fetch(`/api/properties/${id}/status`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/properties/${id}/status`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
