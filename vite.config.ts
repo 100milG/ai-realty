@@ -37,11 +37,7 @@ export default defineConfig({
     allowedHosts: true,
     proxy: {
       '/api': {
-<<<<<<< HEAD
-        target: "https://ai-realty-platform.onrender.com" ,
-=======
         target: 'http://localhost:5000',
->>>>>>> c21e08d215df2d587372a11ec90c10f9d7022d94
         changeOrigin: true,
       },
     },

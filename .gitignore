@@ -1,19 +1,9 @@
-<<<<<<< HEAD
 node_modules
 node_modules_temp
 env.production
 HOSTING_GUIDE.md
-=======
-HOSTING_GUIDE.md
-node_modules
-node_modules_temp
->>>>>>> c21e08d215df2d587372a11ec90c10f9d7022d94
 dist
 .env
 .DS_Store
 /guidelines
-<<<<<<< HEAD
 !.env.example
-=======
-!.env.example
->>>>>>> c21e08d215df2d587372a11ec90c10f9d7022d94
