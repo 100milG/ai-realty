@@ -1,0 +1,9 @@
+node_modules
+node_modules_temp
+env.production
+HOSTING_GUIDE.md
+dist
+.env
+.DS_Store
+/guidelines
+!.env.example
