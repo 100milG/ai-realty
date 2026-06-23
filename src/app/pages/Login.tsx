@@ -28,9 +28,17 @@ export function Login() {
         body: JSON.stringify({ email, password })
       });
 
-      const data = await response.json();
+      // #region agent log
+      fetch('http://127.0.0.1:7872/ingest/1292bd7c-2fa2-46d3-90f7-712f4415e2c9',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'195762'},body:JSON.stringify({sessionId:'195762',location:'Login.tsx:fetch-complete',message:'Fetch completed',data:{status:res.status,ok:res.ok,apiUrl:import.meta.env.VITE_API_URL},timestamp:Date.now(),hypothesisId:'H2-H3',runId:'post-fix'})}).catch(()=>{});
+      // #endregion
 
-      if (!response.ok) {
+      const data = await res.json();
+
+      // #region agent log
+      fetch('http://127.0.0.1:7872/ingest/1292bd7c-2fa2-46d3-90f7-712f4415e2c9',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'195762'},body:JSON.stringify({sessionId:'195762',location:'Login.tsx:parse-complete',message:'Response parsed',data:{hasToken:!!data?.token,hasUser:!!data?.user,role:data?.user?.role},timestamp:Date.now(),hypothesisId:'H4',runId:'post-fix'})}).catch(()=>{});
+      // #endregion
+
+      if (!res.ok) {
         throw new Error(data.error || "Login failed. Please check credentials.");
       }
 
@@ -47,6 +55,9 @@ export function Login() {
         navigate("/customer/dashboard");
       }
     } catch (err: any) {
+      // #region agent log
+      fetch('http://127.0.0.1:7872/ingest/1292bd7c-2fa2-46d3-90f7-712f4415e2c9',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'195762'},body:JSON.stringify({sessionId:'195762',location:'Login.tsx:catch',message:'Login error caught',data:{name:err?.name,message:err?.message,hasResponseVar:typeof (globalThis as any).response},timestamp:Date.now(),hypothesisId:'H1'})}).catch(()=>{});
+      // #endregion
       setError(err.message || "Something went wrong.");
     } finally {
       setIsLoading(false);
