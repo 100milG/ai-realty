@@ -33,9 +33,9 @@ export function Register() {
         body: JSON.stringify({ email, password, name, phone, role })
       });
 
-      const data = await response.json();
+      const data = await res.json();
 
-      if (!response.ok) {
+      if (!res.ok) {
         throw new Error(data.error || "Registration failed. Please try again.");
       }
 
