@@ -37,6 +37,7 @@ export function PropertyDetails() {
   const [visitTime, setVisitTime] = useState("");
   const [visitNotes, setVisitNotes] = useState("");
   const [visitSubmitting, setVisitSubmitting] = useState(false);
+  const [similarProperties, setSimilarProperties] = useState<any[]>([]);
 
   useEffect(() => {
     async function loadPropertyDetails() {
@@ -58,6 +59,19 @@ export function PropertyDetails() {
               const isSaved = savedList.some((p: any) => p.id === id);
               setSaved(isSaved);
             }
+          }
+          // Fetch similar properties (same property type or listing type, exclude current)
+          try {
+            const similarRes = await fetch(`${import.meta.env.VITE_API_URL}/properties`);
+            if (similarRes.ok) {
+              const allProps = await similarRes.json();
+              const similar = allProps
+                .filter((p: any) => p.id !== data.id && (p.propertyType === data.propertyType || p.listingType === data.listingType))
+                .slice(0, 3);
+              setSimilarProperties(similar);
+            }
+          } catch (e) {
+            console.error("Failed to load similar properties", e);
           }
         } else {
           console.error("Property not found");
@@ -581,25 +595,29 @@ export function PropertyDetails() {
             </Card>
 
             {/* Similar Properties */}
-            <Card>
-              <h3 className="font-semibold text-foreground mb-3">Similar Properties</h3>
-              <div className="space-y-3">
-                {[1, 2].map((i) => (
-                  <div key={i} className="flex space-x-3 p-2 hover:bg-secondary/50 rounded-lg cursor-pointer transition-colors">
-                    <img
-                      src={`https://images.unsplash.com/photo-160060${i}685154340-be6161a56a0c?w=200`}
-                      alt=""
-                      className="size-20 rounded-lg object-cover"
-                    />
-                    <div>
-                      <p className="font-medium text-foreground text-sm">Modern Home</p>
-                      <p className="text-xs text-muted-foreground">San Francisco, CA</p>
-                      <p className="text-sm font-semibold text-foreground mt-1">₹78,00,000</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </Card>
+            {similarProperties.length > 0 && (
+              <Card>
+                <h3 className="font-semibold text-foreground mb-3">Similar Properties</h3>
+                <div className="space-y-3">
+                  {similarProperties.map((simProp: any) => (
+                    <Link key={simProp.id} to={`/customer/property/${simProp.id}`}>
+                      <div className="flex space-x-3 p-2 hover:bg-secondary/50 rounded-lg cursor-pointer transition-colors">
+                        <img
+                          src={simProp.media?.[0]?.url || "https://images.unsplash.com/photo-160060685154340-be6161a56a0c?w=200"}
+                          alt={simProp.title}
+                          className="size-20 rounded-lg object-cover"
+                        />
+                        <div>
+                          <p className="font-medium text-foreground text-sm truncate max-w-[180px]">{simProp.title}</p>
+                          <p className="text-xs text-muted-foreground">{simProp.locality?.name || "Unknown Locality"}</p>
+                          <p className="text-sm font-semibold text-foreground mt-1">{formatPriceCompact(simProp.price)}</p>
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </Card>
+            )}
           </div>
         </div>
       </div>

@@ -216,7 +216,7 @@ export function PropertyManagement() {
                         </td>
                         <td className="px-6 py-4 text-right">
                           <div className="flex items-center justify-end space-x-2">
-                            <Link to={`/customer/property/${property.id}`} title="Preview Property">
+                            <Link to={`/subagent/property/${property.id}`} title="Preview Property">
                               <button className="p-2 text-gray-500 hover:text-primary hover:bg-gray-100 rounded-lg transition-colors cursor-pointer">
                                 <Eye className="size-4" />
                               </button>

@@ -15,6 +15,7 @@ import { AddProperty } from "./pages/subagent/AddProperty";
 import { LeadManagement } from "./pages/subagent/LeadManagement";
 import { KYCVerification } from "./pages/subagent/KYCVerification";
 import { PropertyManagement } from "./pages/subagent/PropertyManagement";
+import { SubagentPropertyDetails } from "./pages/subagent/PropertyDetails";
 import { Profile } from "./pages/subagent/Profile";
 
 // Admin Pages
@@ -72,6 +73,7 @@ export const router = createBrowserRouter([
       { path: "properties", Component: PropertyManagement },
       { path: "properties/add", Component: AddProperty },
       { path: "properties/edit/:id", Component: AddProperty },
+      { path: "property/:id", Component: SubagentPropertyDetails },
       { path: "leads", Component: LeadManagement },
       { path: "kyc", Component: KYCVerification },
       { path: "chat", Component: CustomerChat },
