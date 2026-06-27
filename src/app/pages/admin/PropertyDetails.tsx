@@ -111,13 +111,6 @@ export function AdminPropertyDetails() {
 
   return (
     <div className="min-h-screen bg-background pb-12">
-      <div className="p-4 max-w-7xl mx-auto">
-        <button onClick={() => navigate(-1)} className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground mb-4 cursor-pointer">
-          <ArrowLeft className="size-4 mr-2" />
-          Go Back
-        </button>
-      </div>
-
       {/* Image Gallery */}
       <div className="bg-black">
         <div className="max-w-5xl mx-auto">
@@ -127,6 +120,15 @@ export function AdminPropertyDetails() {
               alt={property.title}
               className="size-full object-cover"
             />
+            <div className="absolute top-4 left-4 z-10 flex space-x-2">
+              <button
+                onClick={() => navigate(-1)}
+                className="size-10 bg-white/90 dark:bg-black/40 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg hover:scale-105 transition-transform cursor-pointer"
+                title="Go Back"
+              >
+                <ArrowLeft className="size-5 text-gray-900 dark:text-white" />
+              </button>
+            </div>
             <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
               {images.map((_, index) => (
                 <button
