@@ -11,25 +11,31 @@ import {
   ShoppingCart,
   Coffee,
   Train,
-  ArrowLeft
+  ArrowLeft,
+  ShieldAlert
 } from "lucide-react";
 import { Button } from "../../components/Button";
 import { Badge } from "../../components/Badge";
 import { Card } from "../../components/Card";
 import { formatPriceCompact } from "../../lib/format";
 
-export function SubagentPropertyDetails() {
+export function AdminPropertyDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [property, setProperty] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [currentImage, setCurrentImage] = useState(0);
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
     async function loadPropertyDetails() {
       setLoading(true);
       try {
-        const res = await fetch(`${import.meta.env.VITE_API_URL}/properties/${id}`);
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/properties/${id}`, {
+          headers: {
+            "Authorization": `Bearer ${token}`
+          }
+        });
         if (res.ok) {
           const data = await res.json();
           setProperty(data);
@@ -43,7 +49,7 @@ export function SubagentPropertyDetails() {
       }
     }
     loadPropertyDetails();
-  }, [id]);
+  }, [id, token]);
 
   if (loading) {
     return (
@@ -260,38 +266,35 @@ export function SubagentPropertyDetails() {
             </div>
           </div>
 
-          {/* Sidebar (Subagent Command Center) */}
+          {/* Sidebar (Admin Moderation Center) */}
           <div className="space-y-6">
             {/* Quick Actions & Status */}
             <Card>
               <div className="flex items-center justify-between mb-4">
                 <h3 className="font-semibold text-foreground">Property Status</h3>
-                <Badge variant={property.status === "ACTIVE" ? "success" : property.status === "PENDING_APPROVAL" ? "warning" : "default"} size="sm">
+                <Badge variant={property.status === "ACTIVE" ? "success" : property.status === "PENDING_APPROVAL" ? "warning" : property.status === "REJECTED" ? "danger" : "default"} size="sm">
                   {property.status}
                 </Badge>
               </div>
-              <p className="text-sm text-muted-foreground mb-6">Manage this listing or track incoming buyer requests.</p>
+              <p className="text-sm text-muted-foreground mb-6">Manage this listing from the admin dashboard.</p>
               
               <div className="space-y-3">
-                <Link to={`/subagent/properties/edit/${property.id}`} className="block">
-                  <Button className="w-full" variant="outline">
-                    Edit Property
-                  </Button>
-                </Link>
-                <Link to="/subagent/leads" className="block">
-                  <Button className="w-full" variant="outline">
-                    View Connected Leads
-                  </Button>
-                </Link>
+                {property.status === "PENDING_APPROVAL" && (
+                  <Link to={`/admin/moderation`} className="block">
+                    <Button className="w-full bg-orange-600 hover:bg-orange-700 text-white">
+                      Review in Moderation
+                    </Button>
+                  </Link>
+                )}
                 <Button className="w-full text-destructive hover:bg-destructive hover:text-white transition-colors" variant="outline">
-                  Delete Listing
+                  Delete Listing Permanently
                 </Button>
               </div>
             </Card>
 
             {/* Performance Funnel */}
             <Card>
-              <h3 className="font-semibold text-foreground mb-4">Performance Funnel</h3>
+              <h3 className="font-semibold text-foreground mb-4">Platform Stats</h3>
               <div className="space-y-4">
                 <div>
                   <div className="flex justify-between text-sm mb-1">
@@ -323,35 +326,24 @@ export function SubagentPropertyDetails() {
               </div>
             </Card>
 
-            {/* Pricing Insights */}
-            <Card className="bg-gradient-to-br from-primary/5 to-accent/10 border-primary/20">
-              <h3 className="font-semibold text-foreground mb-3">Market Insights</h3>
+            {/* Compliance Info */}
+            <Card className="bg-gradient-to-br from-red-500/5 to-orange-500/5 border-red-500/20">
+              <h3 className="font-semibold text-foreground mb-3 flex items-center">
+                <ShieldAlert className="size-4 mr-2 text-red-500" />
+                Moderation Insights
+              </h3>
               <div className="flex items-center justify-between mb-2">
-                <span className="text-sm text-muted-foreground">Avg. Locality Price</span>
-                <span className="text-sm font-semibold">₹1.2 Cr</span>
+                <span className="text-sm text-muted-foreground">Flags</span>
+                <span className="text-sm font-semibold">0</span>
               </div>
               <div className="flex items-center justify-between mb-4">
-                <span className="text-sm text-muted-foreground">This Property</span>
-                <span className="text-sm font-semibold">{formattedPrice}</span>
+                <span className="text-sm text-muted-foreground">Last Edited</span>
+                <span className="text-sm font-semibold">Today</span>
               </div>
-              <div className="p-3 bg-white/50 backdrop-blur-sm rounded-lg border border-primary/10">
-                <p className="text-xs text-primary font-medium">
-                  This listing is priced 15% lower than the neighborhood average. Expect high lead volume.
+              <div className="p-3 bg-white/50 backdrop-blur-sm rounded-lg border border-red-500/10">
+                <p className="text-xs text-red-700 font-medium">
+                  This listing complies with all guidelines. No flagged keywords found.
                 </p>
-              </div>
-            </Card>
-
-            {/* Marketing Tools */}
-            <Card>
-              <h3 className="font-semibold text-foreground mb-3">Marketing Tools</h3>
-              <p className="text-sm text-muted-foreground mb-4">Generate assets to share this property on social networks.</p>
-              <div className="grid grid-cols-2 gap-3">
-                <Button variant="outline" size="sm" className="w-full text-xs">
-                  Download Flyer
-                </Button>
-                <Button variant="outline" size="sm" className="w-full text-xs">
-                  Share to Socials
-                </Button>
               </div>
             </Card>
           </div>

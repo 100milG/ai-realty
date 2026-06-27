@@ -74,6 +74,7 @@ export function DashboardLayout() {
 
   const adminLinks = [
     { path: "/admin/dashboard", label: "Dashboard", icon: LayoutDashboard },
+    { path: "/admin/properties", label: "Properties", icon: Building2 },
     { path: "/admin/approvals", label: "Approvals", icon: CheckCircle },
     { path: "/admin/moderation", label: "Moderation", icon: Shield },
     { path: "/admin/leads", label: "Leads", icon: Eye },

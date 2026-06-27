@@ -17,7 +17,8 @@ import {
   Train,
   LogOut,
   MessageSquare,
-  X
+  X,
+  ArrowLeft
 } from "lucide-react";
 import { Button } from "../../components/Button";
 import { Badge } from "../../components/Badge";
@@ -276,6 +277,12 @@ export function PropertyDetails() {
 
   return (
     <div className="min-h-screen bg-background pb-12">
+      <div className="p-4 max-w-7xl mx-auto">
+        <button onClick={() => navigate(-1)} className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground mb-2 cursor-pointer">
+          <ArrowLeft className="size-4 mr-2" />
+          Go Back
+        </button>
+      </div>
       {/* Image Gallery */}
       <div className="bg-black">
         <div className="max-w-7xl mx-auto">

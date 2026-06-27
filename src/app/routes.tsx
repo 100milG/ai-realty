@@ -24,6 +24,8 @@ import { SubagentApproval } from "./pages/admin/SubagentApproval";
 import { PropertyModeration } from "./pages/admin/PropertyModeration";
 import { LeadVisibility } from "./pages/admin/LeadVisibility";
 import { ChatMonitoring } from "./pages/admin/ChatMonitoring";
+import { AdminPropertyManagement } from "./pages/admin/PropertyManagement";
+import { AdminPropertyDetails } from "./pages/admin/PropertyDetails";
 
 // Layouts
 import { CustomerLayout } from "./layouts/CustomerLayout";
@@ -86,6 +88,8 @@ export const router = createBrowserRouter([
     Component: DashboardLayout,
     children: [
       { path: "dashboard", Component: AdminDashboard },
+      { path: "properties", Component: AdminPropertyManagement },
+      { path: "property/:id", Component: AdminPropertyDetails },
       { path: "approvals", Component: SubagentApproval },
       { path: "moderation", Component: PropertyModeration },
       { path: "leads", Component: LeadVisibility },
