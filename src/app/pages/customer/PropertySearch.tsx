@@ -3,6 +3,7 @@ import { Search, SlidersHorizontal, MapPin, Sparkles, X } from "lucide-react";
 import { PropertyCard } from "../../components/PropertyCard";
 import { Button } from "../../components/Button";
 import { Badge } from "../../components/Badge";
+import { formatPriceCompact } from "../../lib/format";
 
 export function PropertySearch() {
   const [allProperties, setAllProperties] = useState<any[]>([]);
@@ -154,14 +155,14 @@ export function PropertySearch() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       {/* Search Header */}
-      <div className="bg-white border-b border-gray-200 sticky top-16 lg:top-0 z-30">
+      <div className="bg-card border-b border-border sticky top-16 lg:top-0 z-30 shadow-soft">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
             <div className="flex-1 relative">
-              <div className="flex items-center bg-gray-100 rounded-lg px-4 py-2 border border-transparent focus-within:border-gray-200">
-                <Search className="size-5 text-gray-400 mr-2 flex-shrink-0" />
+              <div className="flex items-center bg-input-background rounded-xl px-4 py-2.5 border border-border focus-within:ring-2 focus-within:ring-ring/30 transition-all">
+                <Search className="size-5 text-muted-foreground mr-2 flex-shrink-0" />
                 <input
                   type="text"
                   value={searchQuery}
@@ -179,14 +180,14 @@ export function PropertySearch() {
                 {searchQuery && (
                   <button
                     onClick={() => handleSearchChange("")}
-                    className="p-1 rounded-full hover:bg-gray-200 text-gray-450 hover:text-gray-600"
+                    className="p-1 rounded-full hover:bg-secondary text-muted-foreground hover:text-foreground"
                   >
                     <X className="size-4" />
                   </button>
                 )}
               </div>
               {showSuggestions && suggestions.length > 0 && (
-                <div className="absolute z-50 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-60 overflow-y-auto divide-y divide-gray-100">
+                <div className="absolute z-50 w-full mt-1 bg-card border border-border rounded-xl shadow-elevated max-h-60 overflow-y-auto divide-y divide-border">
                   {suggestions.map((item: any, i: number) => {
                     const formatted = item.properties?.formatted || "";
                     return (
@@ -194,7 +195,7 @@ export function PropertySearch() {
                         key={i}
                         type="button"
                         onMouseDown={() => handleSelectLocation(item)}
-                        className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                        className="w-full px-4 py-2.5 text-left text-sm text-foreground hover:bg-secondary transition-colors"
                       >
                         {formatted}
                       </button>
@@ -208,7 +209,7 @@ export function PropertySearch() {
                 <SlidersHorizontal className="size-4 mr-2" />
                 Filters
               </Button>
-              <select className="px-4 py-2 border border-gray-300 rounded-lg bg-white text-sm flex-1 sm:flex-none">
+              <select className="px-4 py-2 border border-border rounded-lg bg-card text-sm text-foreground flex-1 sm:flex-none">
                 <option>Best Match</option>
                 <option>Price: Low to High</option>
                 <option>Price: High to Low</option>
@@ -219,7 +220,7 @@ export function PropertySearch() {
 
           {/* AI Preferences */}
           <div className="flex flex-wrap items-center gap-2 mt-3 text-sm">
-            <div className="flex items-center text-gray-600 mr-1">
+            <div className="flex items-center text-muted-foreground mr-1">
               <Sparkles className="size-4 text-primary mr-1 flex-shrink-0" />
               <span>AI Preferences:</span>
             </div>
@@ -242,37 +243,37 @@ export function PropertySearch() {
 
           {/* Filter Sidebar */}
           <aside className={`
-            fixed inset-y-0 right-0 z-50 w-80 bg-white shadow-xl p-6 border-l border-gray-200 transform transition-transform duration-300 ease-in-out overflow-y-auto
+            fixed inset-y-0 right-0 z-50 w-80 bg-card shadow-elevated p-6 border-l border-border transform transition-transform duration-300 ease-in-out overflow-y-auto
             lg:relative lg:inset-auto lg:z-auto lg:w-auto lg:bg-transparent lg:shadow-none lg:p-0 lg:border-none lg:transform-none lg:block
             ${showFilters ? 'translate-x-0' : 'translate-x-full lg:translate-x-0'}
           `}>
             <div className="flex items-center justify-between lg:hidden mb-6">
-              <h3 className="text-lg font-semibold text-gray-900">Filters</h3>
-              <button onClick={() => setShowFilters(false)} className="p-2 text-gray-500 hover:text-gray-900">
+              <h3 className="text-lg font-display font-semibold text-foreground">Filters</h3>
+              <button onClick={() => setShowFilters(false)} className="p-2 text-muted-foreground hover:text-foreground">
                 <X className="size-6" />
               </button>
             </div>
 
             <div className="space-y-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-foreground mb-2">
                   Price Range
                 </label>
                 <select
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-sm"
+                  className="w-full px-3 py-2 border border-border rounded-lg bg-card text-sm text-foreground"
                   value={priceRange}
                   onChange={(e) => setPriceRange(e.target.value)}
                 >
                   <option value="all">All Prices</option>
-                  <option value="0-500k">Under $500K</option>
-                  <option value="500k-1m">$500K - $1M</option>
-                  <option value="1m-2m">$1M - $2M</option>
-                  <option value="2m+">$2M+</option>
+                  <option value="0-500k">Under ₹4 Cr</option>
+                  <option value="500k-1m">₹4 Cr - ₹8 Cr</option>
+                  <option value="1m-2m">₹8 Cr - ₹16 Cr</option>
+                  <option value="2m+">₹16 Cr+</option>
                 </select>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-foreground mb-2">
                   Bedrooms
                 </label>
                 <div className="grid grid-cols-3 gap-2">
@@ -281,8 +282,8 @@ export function PropertySearch() {
                       key={bed}
                       className={`px-3 py-2 rounded-lg border text-sm transition-colors ${
                         bedrooms === bed
-                          ? 'bg-primary text-white border-primary'
-                          : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
+                          ? 'bg-primary text-primary-foreground border-primary'
+                          : 'bg-card text-foreground border-border hover:bg-secondary'
                       }`}
                       onClick={() => setBedrooms(bed)}
                     >
@@ -293,28 +294,28 @@ export function PropertySearch() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-foreground mb-2">
                   Property Type
                 </label>
                 <div className="space-y-2">
                   {['House', 'Apartment', 'Condo', 'Townhouse', 'Villa'].map((type) => (
                     <label key={type} className="flex items-center">
                       <input type="checkbox" className="rounded text-primary mr-2" />
-                      <span className="text-sm text-gray-700">{type}</span>
+                      <span className="text-sm text-foreground">{type}</span>
                     </label>
                   ))}
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-foreground mb-2">
                   Amenities
                 </label>
                 <div className="space-y-2">
                   {['Pool', 'Garage', 'Garden', 'Gym', 'Security'].map((amenity) => (
                     <label key={amenity} className="flex items-center">
                       <input type="checkbox" className="rounded text-primary mr-2" />
-                      <span className="text-sm text-gray-700">{amenity}</span>
+                      <span className="text-sm text-foreground">{amenity}</span>
                     </label>
                   ))}
                 </div>
@@ -327,7 +328,7 @@ export function PropertySearch() {
           {/* Properties Grid */}
           <div className="lg:col-span-3">
             <div className="flex items-center justify-between mb-6">
-              <p className="text-gray-600 text-sm">{filteredProperties.length} properties found</p>
+              <p className="text-muted-foreground text-sm">{filteredProperties.length} properties found</p>
               <Button variant="ghost" size="sm">
                 <MapPin className="size-4 mr-2" />
                 Map View
@@ -339,14 +340,14 @@ export function PropertySearch() {
                 <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary"></div>
               </div>
             ) : filteredProperties.length === 0 ? (
-              <div className="text-center py-20 bg-white rounded-xl border border-gray-200">
-                <p className="text-gray-500">No active properties found matching your search.</p>
+              <div className="text-center py-20 bg-card rounded-xl border border-border shadow-soft">
+                <p className="text-muted-foreground">No active properties found matching your search.</p>
               </div>
             ) : (
               <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-6">
                 {filteredProperties.map((property: any) => {
                   const imageUrl = property.media && property.media[0] ? property.media[0].url : "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800";
-                  const formattedPrice = property.price ? `$${property.price.toLocaleString()}` : "Contact Agent";
+                  const formattedPrice = formatPriceCompact(property.price);
                   const propertyLocation = property.address || (property.locality ? `${property.locality.name}, ${property.locality.city}` : "Unknown Locality");
                   
                   return (

@@ -91,19 +91,19 @@ export function LeadVisibility() {
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
           <div className="bg-gray-800 rounded-xl border border-gray-700 p-6">
             <p className="text-sm text-gray-400">Total Leads</p>
-            <p className="text-3xl font-semibold text-white mt-2">{totalLeadsCount}</p>
+            <p className="text-3xl font-semibold text-white mt-2 font-numeric">{totalLeadsCount}</p>
           </div>
           <div className="bg-gray-800 rounded-xl border border-gray-700 p-6">
             <p className="text-sm text-gray-400">Active Leads</p>
-            <p className="text-3xl font-semibold text-white mt-2">{activeLeadsCount}</p>
+            <p className="text-3xl font-semibold text-white mt-2 font-numeric">{activeLeadsCount}</p>
           </div>
           <div className="bg-gray-800 rounded-xl border border-gray-700 p-6">
             <p className="text-sm text-gray-400">Avg. Interactions</p>
-            <p className="text-3xl font-semibold text-white mt-2">{avgInteractions}</p>
+            <p className="text-3xl font-semibold text-white mt-2 font-numeric">{avgInteractions}</p>
           </div>
           <div className="bg-gray-800 rounded-xl border border-gray-700 p-6">
             <p className="text-sm text-gray-400">Closed (Converted)</p>
-            <p className="text-3xl font-semibold text-white mt-2">{closedLeadsCount}</p>
+            <p className="text-3xl font-semibold text-white mt-2 font-numeric">{closedLeadsCount}</p>
           </div>
         </div>
 

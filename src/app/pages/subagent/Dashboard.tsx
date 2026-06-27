@@ -40,12 +40,12 @@ export function SubagentDashboard() {
   };
 
   const token = localStorage.getItem("token");
-  let subagentName = "John Doe";
+  let subagentName = "Raj Patel";
   let currentUserId = "";
   if (token) {
     try {
       const payload = JSON.parse(atob(token.split(".")[1]));
-      subagentName = payload.name || "John Doe";
+      subagentName = payload.name || "Raj Patel";
       currentUserId = payload.id;
     } catch (e) {
       console.error(e);
@@ -110,13 +110,13 @@ export function SubagentDashboard() {
   const pendingApprovals = myProperties.filter((p) => p.status === "PENDING_APPROVAL").length;
 
   return (
-    <div className="p-8 bg-gray-50 min-h-screen">
-      <div className="max-w-7xl mx-auto space-y-8">
-        {/* Header */}
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-            <p className="text-gray-600 mt-1">Welcome back, {subagentName}! Track your property listings and leads</p>
+      <div className="p-4 bg-background min-h-screen">
+        <div className="max-w-7xl mx-auto space-y-4">
+          {/* Header */}
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-bold text-foreground font-display">Dashboard</h1>
+              <p className="text-muted-foreground mt-1">Welcome back, {subagentName}! Track your property listings and leads</p>
           </div>
           <Link to="/subagent/properties/add">
             <Button size="lg">
@@ -127,12 +127,12 @@ export function SubagentDashboard() {
         </div>
 
         {/* Stats */}
-        <div className="grid md:grid-cols-4 gap-6">
+        <div className="grid md:grid-cols-4 gap-4">
           <StatCard
             title="Total Properties"
             value={myProperties.length.toString()}
             icon={Building2}
-            iconBgColor="bg-blue-100"
+            iconBgColor="bg-primary/10"
             iconColor="text-primary"
             trend={{ value: "+1 this month", positive: true }}
           />
@@ -140,7 +140,7 @@ export function SubagentDashboard() {
             title="Active Leads"
             value={leads.length.toString()}
             icon={Users}
-            iconBgColor="bg-green-100"
+            iconBgColor="bg-accent/10"
             iconColor="text-accent"
             trend={{ value: `+${leads.length} total`, positive: true }}
           />
@@ -148,46 +148,46 @@ export function SubagentDashboard() {
             title="Pending Approvals"
             value={pendingApprovals.toString()}
             icon={Clock}
-            iconBgColor="bg-yellow-100"
-            iconColor="text-yellow-600"
+            iconBgColor="bg-orange-500/10"
+            iconColor="text-orange-500"
           />
           <StatCard
             title="Total Views"
             value="345"
             icon={Eye}
-            iconBgColor="bg-purple-100"
-            iconColor="text-purple-600"
+            iconBgColor="bg-purple-500/10"
+            iconColor="text-purple-500"
             trend={{ value: "+12% vs last month", positive: true }}
           />
         </div>
 
         {/* Performance Chart */}
         <Card>
-          <h2 className="text-xl font-semibold text-gray-900 mb-6">Performance Overview</h2>
+          <h2 className="text-xl font-semibold text-foreground mb-4 font-display">Performance Overview</h2>
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={performanceData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-              <XAxis dataKey="month" stroke="#6b7280" />
-              <YAxis stroke="#6b7280" />
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
+              <XAxis dataKey="month" stroke="var(--muted-foreground)" />
+              <YAxis stroke="var(--muted-foreground)" />
               <Tooltip
                 contentStyle={{
-                  backgroundColor: "white",
-                  border: "1px solid #e5e7eb",
+                  backgroundColor: "var(--background)",
+                  border: "1px solid var(--border)",
                   borderRadius: "8px",
                 }}
               />
-              <Bar dataKey="leads" fill="#2563EB" radius={[8, 8, 0, 0]} />
-              <Bar dataKey="views" fill="#10B981" radius={[8, 8, 0, 0]} />
+              <Bar dataKey="leads" fill="var(--chart-1)" radius={[8, 8, 0, 0]} />
+              <Bar dataKey="views" fill="var(--chart-2)" radius={[8, 8, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
           <div className="flex items-center justify-center space-x-6 mt-4">
             <div className="flex items-center">
               <div className="size-3 bg-primary rounded mr-2" />
-              <span className="text-sm text-gray-600">Leads</span>
+              <span className="text-sm text-muted-foreground">Leads</span>
             </div>
             <div className="flex items-center">
               <div className="size-3 bg-accent rounded mr-2" />
-              <span className="text-sm text-gray-600">Views</span>
+              <span className="text-sm text-muted-foreground">Views</span>
             </div>
           </div>
         </Card>
@@ -197,15 +197,15 @@ export function SubagentDashboard() {
           <div className="lg:col-span-2">
             <Card>
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-semibold text-gray-900">Recent Leads</h2>
+                <h2 className="text-xl font-semibold text-foreground mb-6 font-display">Recent Leads</h2>
                 <Link to="/subagent/leads">
                   <Button variant="outline" size="sm">View All</Button>
                 </Link>
               </div>
               {leads.length === 0 ? (
-                <p className="text-gray-500 text-center py-6">No leads assigned yet.</p>
+                <p className="text-muted-foreground text-center py-6">No leads assigned yet.</p>
               ) : (
-                <div className="space-y-3">
+                <div className="space-y-2">
                   {leads.slice(0, 3).map((lead) => {
                     const customerName = lead.customer?.name || "Customer";
                     const propertyTitle = lead.property?.title || "Property";
@@ -214,15 +214,15 @@ export function SubagentDashboard() {
                     return (
                       <Link key={lead.id} to={`/subagent/leads`}>
                         <div
-                          className="flex items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors cursor-pointer"
+                          className="flex items-center justify-between p-4 bg-secondary/50 rounded-xl hover:bg-secondary transition-colors cursor-pointer"
                         >
                           <div className="flex items-center space-x-3">
-                            <div className="size-10 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white font-semibold">
+                            <div className="size-10 bg-gradient-to-br from-primary to-accent rounded-full flex items-center justify-center text-primary-foreground font-semibold">
                               {initials}
                             </div>
                             <div>
-                              <p className="font-medium text-gray-900">{customerName}</p>
-                              <p className="text-sm text-gray-600">{propertyTitle}</p>
+                              <p className="font-medium text-foreground">{customerName}</p>
+                              <p className="text-sm text-muted-foreground">{propertyTitle}</p>
                             </div>
                           </div>
                           <div className="flex items-center space-x-3">

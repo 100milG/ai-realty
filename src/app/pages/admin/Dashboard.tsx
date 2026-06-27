@@ -84,7 +84,7 @@ export function AdminDashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-400">Total Users</p>
-                <p className="text-3xl font-semibold text-white mt-2">{stats.totalUsers}</p>
+                <p className="text-3xl font-semibold text-white mt-2 font-numeric">{stats.totalUsers}</p>
                 <p className="text-sm text-green-400 mt-2">↑ Active Profiles</p>
               </div>
               <div className="size-12 bg-blue-500/20 rounded-lg flex items-center justify-center">
@@ -97,7 +97,7 @@ export function AdminDashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-400">Total Properties</p>
-                <p className="text-3xl font-semibold text-white mt-2">{stats.totalProperties}</p>
+                <p className="text-3xl font-semibold text-white mt-2 font-numeric">{stats.totalProperties}</p>
                 <p className="text-sm text-green-400 mt-2">↑ Database Catalog</p>
               </div>
               <div className="size-12 bg-green-500/20 rounded-lg flex items-center justify-center">
@@ -110,7 +110,7 @@ export function AdminDashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-400">Total Subagents</p>
-                <p className="text-3xl font-semibold text-white mt-2">{stats.totalSubagents}</p>
+                <p className="text-3xl font-semibold text-white mt-2 font-numeric">{stats.totalSubagents}</p>
                 <p className="text-sm text-purple-400 mt-2">Verify Listings</p>
               </div>
               <div className="size-12 bg-purple-500/20 rounded-lg flex items-center justify-center">
@@ -123,7 +123,7 @@ export function AdminDashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-400">Pending Approvals</p>
-                <p className="text-3xl font-semibold text-white mt-2">{stats.totalPendingApprovals}</p>
+                <p className="text-3xl font-semibold text-white mt-2 font-numeric">{stats.totalPendingApprovals}</p>
                 <p className="text-sm text-yellow-400 mt-2">Verification Queue</p>
               </div>
               <div className="size-12 bg-yellow-500/20 rounded-lg flex items-center justify-center">

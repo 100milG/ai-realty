@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router";
-import { Upload, MapPin, DollarSign, CheckCircle2, X } from "lucide-react";
+import { Upload, MapPin, IndianRupee, CheckCircle2, X } from "lucide-react";
 import { Button } from "../../components/Button";
 import { Card } from "../../components/Card";
 import { Badge } from "../../components/Badge";
@@ -318,7 +318,7 @@ export function AddProperty() {
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Price *</label>
                   <div className="relative">
-                    <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 size-5 text-gray-400" />
+                    <IndianRupee className="absolute left-3 top-1/2 transform -translate-y-1/2 size-5 text-gray-400" />
                     <input
                       type="text"
                       value={formData.price}

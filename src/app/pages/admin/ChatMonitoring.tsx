@@ -112,7 +112,7 @@ export function ChatMonitoring() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-400">Total Conversations</p>
-                <p className="text-3xl font-semibold text-white mt-2">{sessions.length}</p>
+                <p className="text-3xl font-semibold text-white mt-2 font-numeric">{sessions.length}</p>
               </div>
               <MessageSquare className="size-8 text-blue-400" />
             </div>
@@ -121,7 +121,7 @@ export function ChatMonitoring() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-400">Active Chats</p>
-                <p className="text-3xl font-semibold text-white mt-2">{activeCount}</p>
+                <p className="text-3xl font-semibold text-white mt-2 font-numeric">{activeCount}</p>
               </div>
               <Eye className="size-8 text-green-400" />
             </div>
@@ -130,7 +130,7 @@ export function ChatMonitoring() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-400">Flagged</p>
-                <p className="text-3xl font-semibold text-white mt-2">{flaggedCount}</p>
+                <p className="text-3xl font-semibold text-white mt-2 font-numeric">{flaggedCount}</p>
               </div>
               <Flag className="size-8 text-red-400" />
             </div>
@@ -139,7 +139,7 @@ export function ChatMonitoring() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-400">Total Messages</p>
-                <p className="text-3xl font-semibold text-white mt-2">{totalMessages}</p>
+                <p className="text-3xl font-semibold text-white mt-2 font-numeric">{totalMessages}</p>
               </div>
               <MessageSquare className="size-8 text-purple-400" />
             </div>

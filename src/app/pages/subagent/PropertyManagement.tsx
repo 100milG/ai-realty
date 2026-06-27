@@ -171,7 +171,7 @@ export function PropertyManagement() {
                       ? property.media[0].url 
                       : "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=100";
                     const formattedPrice = property.price 
-                      ? `$${property.price.toLocaleString()}` 
+                      ? `₹ ${property.price.toLocaleString()}` 
                       : "Contact Agent";
                     const propertyLocation = property.address || (property.locality ? `${property.locality.name}, ${property.locality.city}` : "Unknown Locality");
 
@@ -193,7 +193,7 @@ export function PropertyManagement() {
                         <td className="px-6 py-4 text-gray-700">
                           {property.locality?.name || "N/A"}
                         </td>
-                        <td className="px-6 py-4 font-semibold text-gray-900">
+                        <td className="px-6 py-4 font-semibold text-gray-900 font-numeric">
                           {formattedPrice}
                         </td>
                         <td className="px-6 py-4">

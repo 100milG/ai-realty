@@ -139,10 +139,10 @@ export function PropertyModeration() {
             ) : (
               properties.map((property) => {
                 const coverImage = property.media?.[0]?.url || "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=400";
-                const formattedPrice = property.price ? `$${property.price.toLocaleString()}` : "Contact Agent";
+                const formattedPrice = property.price ? `₹${property.price.toLocaleString()}` : "Contact Agent";
                 const propertyLocation = property.address || (property.locality ? `${property.locality.name}, ${property.locality.city}` : "Unknown Locality");
                 const agentRelation = property.agents?.[0];
-                const agentName = agentRelation?.subagent?.name || "John Doe";
+                const agentName = agentRelation?.subagent?.name || "Raj Patel";
                 const formattedTime = new Date(property.createdAt).toLocaleDateString();
 
                 return (
@@ -172,7 +172,7 @@ export function PropertyModeration() {
                           </Badge>
                         </div>
 
-                        <p className="text-2xl font-bold text-white mb-3">{formattedPrice}</p>
+                        <p className="text-2xl font-bold text-white mb-3 font-numeric">{formattedPrice}</p>
 
                         <div className="flex items-center space-x-4 text-sm text-gray-400 mb-3">
                           <span>{property.beds || 0} beds</span>
@@ -236,15 +236,15 @@ export function PropertyModeration() {
                   <p className="text-sm text-gray-400 mb-3">
                     {selectedProperty.address || (selectedProperty.locality ? `${selectedProperty.locality.name}, ${selectedProperty.locality.city}` : "Unknown Locality")}
                   </p>
-                  <p className="text-3xl font-bold text-white mb-4">
-                    {selectedProperty.price ? `$${selectedProperty.price.toLocaleString()}` : "Contact Agent"}
+                  <p className="text-3xl font-bold text-white mb-4 font-numeric">
+                    {selectedProperty.price ? `₹${selectedProperty.price.toLocaleString()}` : "Contact Agent"}
                   </p>
                 </div>
 
                 <div className="grid grid-cols-4 gap-3 pb-4 border-b border-gray-700">
                   <div>
                     <p className="text-xs text-gray-400">Bedrooms</p>
-                    <p className="text-lg font-semibold text-white">{selectedProperty.beds || 0}</p>
+                    <p className="text-lg font-semibold text-white font-numeric">{selectedProperty.beds || 0}</p>
                   </div>
                   <div>
                     <p className="text-xs text-gray-400">Bathrooms</p>

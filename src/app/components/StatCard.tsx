@@ -18,23 +18,23 @@ export function StatCard({
   value,
   icon: Icon,
   trend,
-  iconBgColor = "bg-blue-100",
+  iconBgColor = "bg-primary/10",
   iconColor = "text-primary",
 }: StatCardProps) {
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
+    <div className="bg-card rounded-xl border border-border p-4 shadow-soft">
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-sm text-gray-600">{title}</p>
-          <p className="text-3xl font-semibold text-gray-900 mt-2">{value}</p>
+          <p className="text-sm text-muted-foreground">{title}</p>
+          <p className="text-3xl font-semibold text-foreground mt-1 font-numeric">{value}</p>
           {trend && (
-            <p className={`text-sm mt-2 ${trend.positive ? "text-green-600" : "text-red-600"}`}>
+            <p className={`text-sm mt-1 font-numeric ${trend.positive ? "text-emerald-600 dark:text-emerald-400" : "text-red-600 dark:text-red-400"}`}>
               {trend.positive ? "↑" : "↓"} {trend.value}
             </p>
           )}
         </div>
-        <div className={`size-12 ${iconBgColor} rounded-lg flex items-center justify-center`}>
-          <Icon className={`size-6 ${iconColor}`} />
+        <div className={`size-10 ${iconBgColor} rounded-xl flex items-center justify-center`}>
+          <Icon className={`size-5 ${iconColor}`} />
         </div>
       </div>
     </div>

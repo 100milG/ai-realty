@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router";
-import { MapPin, Bed, Bath, Maximize, Sparkles } from "lucide-react";
+import { MapPin, Bed, Bath, Maximize, Sparkles, ArrowUpRight } from "lucide-react";
 import { Badge } from "./Badge";
 
 interface PropertyCardProps {
@@ -28,14 +28,19 @@ export function PropertyCard({
   aiReason,
 }: PropertyCardProps) {
   const loc = useLocation();
-  const isCustomer = loc.pathname.startsWith('/customer');
+  const isCustomer = loc.pathname.startsWith("/customer");
   const detailsPath = isCustomer ? `/customer/property/${id}` : `/property/${id}`;
 
   return (
-    <Link to={detailsPath}>
-      <div className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow">
-        <div className="relative h-48">
-          <img src={image} alt={title} className="size-full object-cover" />
+    <Link to={detailsPath} className="group block">
+      <article className="bg-card rounded-xl border border-border overflow-hidden shadow-soft hover:shadow-elevated transition-all duration-300 hover:-translate-y-0.5">
+        <div className="relative h-52 overflow-hidden">
+          <img
+            src={image}
+            alt={title}
+            className="size-full object-cover transition-transform duration-500 group-hover:scale-105"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
           {aiScore && (
             <div className="absolute top-3 right-3">
               <Badge variant="ai" size="sm">
@@ -44,37 +49,40 @@ export function PropertyCard({
               </Badge>
             </div>
           )}
+          <div className="absolute bottom-3 right-3 size-8 bg-card/90 backdrop-blur-sm rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+            <ArrowUpRight className="size-4 text-foreground" />
+          </div>
         </div>
-        <div className="p-4">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-2xl font-semibold text-gray-900">{price}</span>
+        <div className="p-5">
+          <div className="flex items-start justify-between gap-2 mb-2">
+            <span className="text-xl font-semibold text-foreground font-numeric">{price}</span>
           </div>
-          <h3 className="font-medium text-gray-900 mb-1">{title}</h3>
-          <div className="flex items-center text-sm text-gray-600 mb-3">
-            <MapPin className="size-4 mr-1" />
-            {location}
+          <h3 className="font-medium text-foreground mb-1.5 line-clamp-1">{title}</h3>
+          <div className="flex items-center text-sm text-muted-foreground mb-4">
+            <MapPin className="size-3.5 mr-1 shrink-0" />
+            <span className="line-clamp-1">{location}</span>
           </div>
-          <div className="flex items-center space-x-4 text-sm text-gray-600 border-t border-gray-100 pt-3">
-            <div className="flex items-center">
-              <Bed className="size-4 mr-1" />
-              {beds} Beds
+          <div className="flex items-center gap-4 text-sm text-muted-foreground border-t border-border pt-3">
+            <div className="flex items-center gap-1">
+              <Bed className="size-3.5" />
+              <span className="font-numeric">{beds}</span> Beds
             </div>
-            <div className="flex items-center">
-              <Bath className="size-4 mr-1" />
-              {baths} Baths
+            <div className="flex items-center gap-1">
+              <Bath className="size-3.5" />
+              <span className="font-numeric">{baths}</span> Baths
             </div>
-            <div className="flex items-center">
-              <Maximize className="size-4 mr-1" />
-              {sqft} sqft
+            <div className="flex items-center gap-1">
+              <Maximize className="size-3.5" />
+              <span className="font-numeric">{sqft.toLocaleString()} sqft</span>
             </div>
           </div>
           {aiReason && (
-            <div className="mt-3 p-2 bg-purple-50 rounded-lg">
-              <p className="text-xs text-purple-700">{aiReason}</p>
+            <div className="mt-3 p-2.5 bg-primary/5 rounded-lg border border-primary/10">
+              <p className="text-xs text-muted-foreground line-clamp-2">{aiReason}</p>
             </div>
           )}
         </div>
-      </div>
+      </article>
     </Link>
   );
 }
