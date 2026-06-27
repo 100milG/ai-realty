@@ -15,6 +15,7 @@ import { AddProperty } from "./pages/subagent/AddProperty";
 import { LeadManagement } from "./pages/subagent/LeadManagement";
 import { KYCVerification } from "./pages/subagent/KYCVerification";
 import { PropertyManagement } from "./pages/subagent/PropertyManagement";
+import { SubagentPropertyDetails } from "./pages/subagent/PropertyDetails";
 import { Profile } from "./pages/subagent/Profile";
 
 // Admin Pages
@@ -23,6 +24,8 @@ import { SubagentApproval } from "./pages/admin/SubagentApproval";
 import { PropertyModeration } from "./pages/admin/PropertyModeration";
 import { LeadVisibility } from "./pages/admin/LeadVisibility";
 import { ChatMonitoring } from "./pages/admin/ChatMonitoring";
+import { AdminPropertyManagement } from "./pages/admin/PropertyManagement";
+import { AdminPropertyDetails } from "./pages/admin/PropertyDetails";
 
 // Layouts
 import { CustomerLayout } from "./layouts/CustomerLayout";
@@ -72,6 +75,7 @@ export const router = createBrowserRouter([
       { path: "properties", Component: PropertyManagement },
       { path: "properties/add", Component: AddProperty },
       { path: "properties/edit/:id", Component: AddProperty },
+      { path: "property/:id", Component: SubagentPropertyDetails },
       { path: "leads", Component: LeadManagement },
       { path: "kyc", Component: KYCVerification },
       { path: "chat", Component: CustomerChat },
@@ -84,6 +88,8 @@ export const router = createBrowserRouter([
     Component: DashboardLayout,
     children: [
       { path: "dashboard", Component: AdminDashboard },
+      { path: "properties", Component: AdminPropertyManagement },
+      { path: "property/:id", Component: AdminPropertyDetails },
       { path: "approvals", Component: SubagentApproval },
       { path: "moderation", Component: PropertyModeration },
       { path: "leads", Component: LeadVisibility },

@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router";
 import { Mail, Lock, ArrowRight, User, Shield, Building2, Eye, EyeOff, Home } from "lucide-react";
 import { Button } from "../components/Button";
+import { ThemeToggle } from "../components/ThemeToggle";
+import { AuthBackButton } from "../components/AuthBackButton";
 
 export function Login() {
   const navigate = useNavigate();
@@ -72,45 +74,51 @@ export function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 flex flex-col justify-center py-12 sm:px-6 lg:px-8 relative overflow-hidden">
+    <div className="min-h-screen bg-background flex flex-col justify-center py-12 sm:px-6 lg:px-8 relative overflow-hidden">
       {/* Background glowing gradients */}
       <div className="absolute top-[-20%] left-[-10%] size-96 bg-primary/10 rounded-full blur-[120px] pointer-events-none" />
       <div className="absolute bottom-[-20%] right-[-10%] size-96 bg-accent/10 rounded-full blur-[120px] pointer-events-none" />
 
+      <AuthBackButton />
+
+      <div className="absolute top-6 right-6 z-20">
+        <ThemeToggle />
+      </div>
+
       <div className="sm:mx-auto sm:w-full sm:max-w-md z-10">
         <Link to="/" className="flex items-center justify-center space-x-2 mb-6">
-          <div className="size-10 bg-gradient-to-br from-primary to-accent rounded-xl flex items-center justify-center shadow-lg shadow-primary/20">
+          <div className="size-10 bg-gradient-brand rounded-xl flex items-center justify-center shadow-soft">
             <Home className="size-6 text-white" />
           </div>
-          <span className="font-bold text-2xl text-white tracking-tight">AI Realty</span>
+          <span className="font-display font-bold text-2xl text-foreground tracking-tight">AI Realty</span>
         </Link>
-        <h2 className="text-center text-3xl font-extrabold text-white tracking-tight">
+        <h2 className="text-center text-3xl font-display font-bold text-foreground tracking-tight">
           Sign in to your account
         </h2>
-        <p className="mt-2 text-center text-sm text-slate-400">
+        <p className="mt-2 text-center text-sm text-muted-foreground">
           Don't have an account?{" "}
-          <Link to="/register" className="font-semibold text-primary hover:text-primary-hover transition-colors">
+          <Link to="/register" className="font-semibold text-primary hover:text-primary/80 transition-colors">
             Sign up
           </Link>
         </p>
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md z-10 px-4 sm:px-0">
-        <div className="bg-slate-900/60 backdrop-blur-xl py-8 px-4 shadow-2xl border border-slate-800/80 rounded-2xl sm:px-10">
+        <div className="bg-card/80 backdrop-blur-xl py-8 px-4 shadow-elevated border border-border rounded-2xl sm:px-10">
           {error && (
-            <div className="mb-6 bg-red-950/40 border border-red-800/60 text-red-300 px-4 py-3 rounded-xl text-sm">
+            <div className="mb-6 bg-destructive/10 border border-destructive/30 text-destructive px-4 py-3 rounded-xl text-sm">
               {error}
             </div>
           )}
 
           <form className="space-y-6" onSubmit={handleLogin}>
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-slate-300">
+              <label htmlFor="email" className="block text-sm font-medium text-foreground">
                 Email address
               </label>
               <div className="mt-1.5 relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Mail className="size-5 text-slate-500" />
+                  <Mail className="size-5 text-muted-foreground" />
                 </div>
                 <input
                   id="email"
@@ -121,18 +129,18 @@ export function Login() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="name@example.com"
-                  className="block w-full pl-10 pr-3 py-2.5 bg-slate-950/80 border border-slate-800 rounded-xl text-white placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all text-sm"
+                  className="block w-full pl-10 pr-3 py-2.5 bg-input-background border border-border rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all text-sm"
                 />
               </div>
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-slate-300">
+              <label htmlFor="password" className="block text-sm font-medium text-foreground">
                 Password
               </label>
               <div className="mt-1.5 relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Lock className="size-5 text-slate-500" />
+                  <Lock className="size-5 text-muted-foreground" />
                 </div>
                 <input
                   id="password"
@@ -143,12 +151,12 @@ export function Login() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="block w-full pl-10 pr-10 py-2.5 bg-slate-950/80 border border-slate-800 rounded-xl text-white placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all text-sm"
+                  className="block w-full pl-10 pr-10 py-2.5 bg-input-background border border-border rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all text-sm"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-500 hover:text-slate-300 focus:outline-none cursor-pointer"
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-muted-foreground hover:text-foreground focus:outline-none cursor-pointer"
                 >
                   {showPassword ? <EyeOff className="size-5" /> : <Eye className="size-5" />}
                 </button>
@@ -162,37 +170,37 @@ export function Login() {
           </form>
 
           {/* Quick Login Section for Developer Evaluation */}
-          <div className="mt-8 border-t border-slate-850 pt-6">
-            <span className="block text-center text-xs font-semibold uppercase tracking-wider text-slate-500 mb-4">
+          <div className="mt-8 border-t border-border pt-6">
+            <span className="block text-center text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-4">
               Quick Test Accounts (Seeded)
             </span>
             <div className="grid grid-cols-3 gap-2">
               <button
                 type="button"
                 onClick={() => quickLogin("priya@example.com")}
-                className="flex flex-col items-center justify-center p-3 bg-slate-950/60 border border-slate-850 rounded-xl hover:bg-slate-900/90 transition-all group cursor-pointer"
+                className="flex flex-col items-center justify-center p-3 bg-secondary border border-border rounded-xl hover:bg-muted transition-all group cursor-pointer"
               >
-                <User className="size-5 text-slate-400 group-hover:text-primary transition-colors" />
-                <span className="text-[10px] font-medium text-slate-300 mt-1">Customer</span>
-                <span className="text-[8px] text-slate-500">Priya</span>
+                <User className="size-5 text-muted-foreground group-hover:text-primary transition-colors" />
+                <span className="text-[10px] font-medium text-foreground mt-1">Customer</span>
+                <span className="text-[8px] text-muted-foreground">Priya</span>
               </button>
               <button
                 type="button"
                 onClick={() => quickLogin("raj@example.com")}
-                className="flex flex-col items-center justify-center p-3 bg-slate-950/60 border border-slate-850 rounded-xl hover:bg-slate-900/90 transition-all group cursor-pointer"
+                className="flex flex-col items-center justify-center p-3 bg-secondary border border-border rounded-xl hover:bg-muted transition-all group cursor-pointer"
               >
-                <Building2 className="size-5 text-slate-400 group-hover:text-primary transition-colors" />
-                <span className="text-[10px] font-medium text-slate-300 mt-1">Subagent</span>
-                <span className="text-[8px] text-slate-500">Raj</span>
+                <Building2 className="size-5 text-muted-foreground group-hover:text-primary transition-colors" />
+                <span className="text-[10px] font-medium text-foreground mt-1">Subagent</span>
+                <span className="text-[8px] text-muted-foreground">Raj</span>
               </button>
               <button
                 type="button"
                 onClick={() => quickLogin("admin@example.com")}
-                className="flex flex-col items-center justify-center p-3 bg-slate-950/60 border border-slate-850 rounded-xl hover:bg-slate-900/90 transition-all group cursor-pointer"
+                className="flex flex-col items-center justify-center p-3 bg-secondary border border-border rounded-xl hover:bg-muted transition-all group cursor-pointer"
               >
-                <Shield className="size-5 text-slate-400 group-hover:text-primary transition-colors" />
-                <span className="text-[10px] font-medium text-slate-300 mt-1">Admin</span>
-                <span className="text-[8px] text-slate-500">System</span>
+                <Shield className="size-5 text-muted-foreground group-hover:text-primary transition-colors" />
+                <span className="text-[10px] font-medium text-foreground mt-1">Admin</span>
+                <span className="text-[8px] text-muted-foreground">System</span>
               </button>
             </div>
           </div>

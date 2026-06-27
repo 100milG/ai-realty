@@ -1,5 +1,6 @@
 import { ReactNode } from "react";
 import { LucideIcon } from "lucide-react";
+import { motion } from "motion/react";
 
 interface StatCardProps {
   title: string;
@@ -18,25 +19,29 @@ export function StatCard({
   value,
   icon: Icon,
   trend,
-  iconBgColor = "bg-blue-100",
+  iconBgColor = "bg-primary/10",
   iconColor = "text-primary",
 }: StatCardProps) {
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
+    <motion.div 
+      whileHover={{ y: -4, scale: 1.02 }}
+      transition={{ type: "spring", stiffness: 300 }}
+      className="glass rounded-2xl p-5 shadow-soft hover:shadow-elevated transition-shadow"
+    >
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-sm text-gray-600">{title}</p>
-          <p className="text-3xl font-semibold text-gray-900 mt-2">{value}</p>
+          <p className="text-sm font-medium text-muted-foreground tracking-wide uppercase">{title}</p>
+          <p className="text-3xl font-bold text-foreground mt-2 font-numeric">{value}</p>
           {trend && (
-            <p className={`text-sm mt-2 ${trend.positive ? "text-green-600" : "text-red-600"}`}>
-              {trend.positive ? "↑" : "↓"} {trend.value}
-            </p>
+            <div className={`inline-flex items-center text-xs mt-3 px-2 py-1 rounded-md font-medium ${trend.positive ? "bg-emerald-500/10 text-emerald-700 dark:text-emerald-400" : "bg-red-500/10 text-red-700 dark:text-red-400"}`}>
+              <span className="mr-1">{trend.positive ? "↑" : "↓"}</span> {trend.value}
+            </div>
           )}
         </div>
-        <div className={`size-12 ${iconBgColor} rounded-lg flex items-center justify-center`}>
+        <div className={`size-12 ${iconBgColor} rounded-xl flex items-center justify-center shadow-sm`}>
           <Icon className={`size-6 ${iconColor}`} />
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }

@@ -1,4 +1,5 @@
 import { ReactNode } from "react";
+import { motion } from "motion/react";
 
 interface CardProps {
   children: ReactNode;
@@ -9,12 +10,13 @@ interface CardProps {
 
 export function Card({ children, className = "", padding = true, hover = false }: CardProps) {
   return (
-    <div
-      className={`bg-white rounded-xl border border-gray-200 ${
-        hover ? "hover:shadow-md transition-shadow cursor-pointer" : "shadow-sm"
+    <motion.div
+      whileHover={hover ? { y: -2, scale: 1.01 } : {}}
+      className={`glass rounded-2xl shadow-soft ${
+        hover ? "hover:shadow-elevated transition-all cursor-pointer" : ""
       } ${padding ? "p-6" : ""} ${className}`}
     >
       {children}
-    </div>
+    </motion.div>
   );
 }

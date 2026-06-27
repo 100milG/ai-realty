@@ -17,11 +17,13 @@ import {
   Train,
   LogOut,
   MessageSquare,
-  X
+  X,
+  ArrowLeft
 } from "lucide-react";
 import { Button } from "../../components/Button";
 import { Badge } from "../../components/Badge";
 import { Card } from "../../components/Card";
+import { formatPriceCompact } from "../../lib/format";
 
 export function PropertyDetails() {
   const { id } = useParams();
@@ -36,6 +38,7 @@ export function PropertyDetails() {
   const [visitTime, setVisitTime] = useState("");
   const [visitNotes, setVisitNotes] = useState("");
   const [visitSubmitting, setVisitSubmitting] = useState(false);
+  const [similarProperties, setSimilarProperties] = useState<any[]>([]);
 
   useEffect(() => {
     async function loadPropertyDetails() {
@@ -57,6 +60,19 @@ export function PropertyDetails() {
               const isSaved = savedList.some((p: any) => p.id === id);
               setSaved(isSaved);
             }
+          }
+          // Fetch similar properties (same property type or listing type, exclude current)
+          try {
+            const similarRes = await fetch(`${import.meta.env.VITE_API_URL}/properties`);
+            if (similarRes.ok) {
+              const allProps = await similarRes.json();
+              const similar = allProps
+                .filter((p: any) => p.id !== data.id && (p.propertyType === data.propertyType || p.listingType === data.listingType))
+                .slice(0, 3);
+              setSimilarProperties(similar);
+            }
+          } catch (e) {
+            console.error("Failed to load similar properties", e);
           }
         } else {
           console.error("Property not found");
@@ -192,16 +208,16 @@ export function PropertyDetails() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex justify-center items-center py-20">
-        <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary"></div>
+      <div className="min-h-screen bg-background flex justify-center items-center py-20">
+        <div className="animate-spin rounded-full h-10 w-10 border-2 border-primary border-t-transparent"></div>
       </div>
     );
   }
 
   if (!property) {
     return (
-      <div className="min-h-screen bg-gray-50 flex flex-col justify-center items-center py-20">
-        <p className="text-gray-500 text-lg mb-4">Property not found</p>
+      <div className="min-h-screen bg-background flex flex-col justify-center items-center py-20">
+        <p className="text-muted-foreground text-lg mb-4">Property not found</p>
         <Link to="/customer/search">
           <Button>Back to Search</Button>
         </Link>
@@ -213,14 +229,14 @@ export function PropertyDetails() {
     ? property.media.map((m: any) => m.url)
     : ["https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800"];
 
-  const formattedPrice = property.price ? `₹${property.price.toLocaleString()}` : "Contact Agent";
+  const formattedPrice = formatPriceCompact(property.price);
   const propertyLocation = property.address || (property.locality ? `${property.locality.name}, ${property.locality.city}` : "Unknown Locality");
   const amenities = property.amenities?.map((a: any) => a.amenity.name) || [];
   const hasGarage = amenities.some((name: string) => name.toLowerCase().includes("garage")) ? "Yes" : "No";
 
   const primaryAgentRelation = property.agents?.find((a: any) => a.primaryAgent) || property.agents?.[0];
   const agent = primaryAgentRelation?.subagent;
-  const agentName = agent?.name || "John Doe";
+  const agentName = agent?.name || "Raj Patel";
   const agentInitials = agentName
     .split(" ")
     .map((n: string) => n[0])
@@ -260,7 +276,7 @@ export function PropertyDetails() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-12">
+    <div className="min-h-screen bg-background pb-12">
       {/* Image Gallery */}
       <div className="bg-black">
         <div className="max-w-7xl mx-auto">
@@ -270,15 +286,24 @@ export function PropertyDetails() {
               alt={property.title}
               className="size-full object-cover"
             />
+            <div className="absolute top-4 left-4 z-10 flex space-x-2">
+              <button
+                onClick={() => navigate(-1)}
+                className="size-10 bg-white/90 dark:bg-black/40 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg hover:scale-105 transition-transform cursor-pointer"
+                title="Go Back"
+              >
+                <ArrowLeft className="size-5 text-gray-900 dark:text-white" />
+              </button>
+            </div>
             <div className="absolute top-4 right-4 flex space-x-2">
               <button
                 onClick={handleToggleSave}
-                className="size-10 bg-white rounded-full flex items-center justify-center shadow-lg hover:scale-105 transition-transform"
+                className="size-10 bg-card rounded-full flex items-center justify-center shadow-elevated hover:scale-105 transition-transform"
               >
-                <Heart className={`size-5 ${saved ? 'fill-red-500 text-red-500' : 'text-gray-700'}`} />
+                <Heart className={`size-5 ${saved ? 'fill-red-500 text-red-500' : 'text-foreground'}`} />
               </button>
               <button className="size-10 bg-white rounded-full flex items-center justify-center shadow-lg hover:scale-105 transition-transform">
-                <Share2 className="size-5 text-gray-700" />
+                <Share2 className="size-5 text-foreground" />
               </button>
             </div>
             <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
@@ -317,14 +342,14 @@ export function PropertyDetails() {
             <Card>
               <div className="flex items-start justify-between mb-4">
                 <div>
-                  <h1 className="text-3xl font-bold text-gray-900 mb-2">{property.title}</h1>
-                  <div className="flex items-center text-gray-600">
+                  <h1 className="text-3xl font-display font-bold text-foreground mb-2">{property.title}</h1>
+                  <div className="flex items-center text-muted-foreground">
                     <MapPin className="size-5 mr-2" />
                     {propertyLocation}
                   </div>
                 </div>
                 <div className="text-right">
-                  <p className="text-3xl font-bold text-gray-900">{formattedPrice}</p>
+                  <p className="text-3xl font-bold text-foreground font-numeric">{formattedPrice}</p>
                   <div className="mt-2">
                     <Badge variant="info" size="sm">
                     {property.listingType === "RENT" ? "For Rent" : "For Sale"}
@@ -334,32 +359,32 @@ export function PropertyDetails() {
               </div>
 
 
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 py-4 border-t border-gray-200">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 py-4 border-t border-border">
                 <div className="flex items-center space-x-2">
-                  <Bed className="size-5 text-gray-400" />
+                  <Bed className="size-5 text-muted-foreground" />
                   <div>
-                    <p className="text-sm text-gray-600">Bedrooms</p>
-                    <p className="font-semibold">{property.beds || 0}</p>
+                    <p className="text-sm text-muted-foreground">Bedrooms</p>
+                    <p className="font-semibold font-numeric">{property.beds || 0}</p>
                   </div>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <Bath className="size-5 text-gray-400" />
+                  <Bath className="size-5 text-muted-foreground" />
                   <div>
-                    <p className="text-sm text-gray-600">Bathrooms</p>
-                    <p className="font-semibold">{property.baths || 0}</p>
+                    <p className="text-sm text-muted-foreground">Bathrooms</p>
+                    <p className="font-semibold font-numeric">{property.baths || 0}</p>
                   </div>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <Maximize className="size-5 text-gray-400" />
+                  <Maximize className="size-5 text-muted-foreground" />
                   <div>
-                    <p className="text-sm text-gray-600">Sqft</p>
-                    <p className="font-semibold">{property.sqft || 0}</p>
+                    <p className="text-sm text-muted-foreground">Sqft</p>
+                    <p className="font-semibold font-numeric">{property.sqft || 0}</p>
                   </div>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <Car className="size-5 text-gray-400" />
+                  <Car className="size-5 text-muted-foreground" />
                   <div>
-                    <p className="text-sm text-gray-600">Garage</p>
+                    <p className="text-sm text-muted-foreground">Garage</p>
                     <p className="font-semibold">{hasGarage}</p>
                   </div>
                 </div>
@@ -367,39 +392,39 @@ export function PropertyDetails() {
             </Card>
 
             {/* AI Recommendation */}
-            <Card className="bg-gradient-to-br from-purple-50 to-blue-50 border-purple-200">
+            <Card className="bg-gradient-to-br from-primary/5 to-accent/10 border-primary/20">
               <div className="flex items-start space-x-3">
-                <div className="size-10 bg-gradient-to-br from-primary to-accent rounded-lg flex items-center justify-center flex-shrink-0">
+                <div className="size-10 bg-gradient-brand rounded-xl flex items-center justify-center flex-shrink-0 shadow-soft">
                   <Sparkles className="size-6 text-white" />
                 </div>
                 <div className="flex-1">
                   <div className="flex items-center justify-between mb-2">
-                    <h3 className="font-semibold text-gray-900">AI Match Score</h3>
+                    <h3 className="font-semibold text-foreground">AI Match Score</h3>
                     <Badge variant="ai">95% Match</Badge>
                   </div>
-                  <h4 className="font-medium text-gray-900 mb-2">Why this property suits you:</h4>
+                  <h4 className="font-medium text-foreground mb-2">Why this property suits you:</h4>
                   <ul className="space-y-2">
                     <li className="flex items-start">
                       <CheckCircle2 className="size-5 text-accent mr-2 flex-shrink-0 mt-0.5" />
-                      <span className="text-gray-700">
+                      <span className="text-muted-foreground">
                         Matches your preference for modern architecture with open floor plans
                       </span>
                     </li>
                     <li className="flex items-start">
                       <CheckCircle2 className="size-5 text-accent mr-2 flex-shrink-0 mt-0.5" />
-                      <span className="text-gray-700">
+                      <span className="text-muted-foreground">
                         Located in a family-friendly neighborhood with top-rated schools nearby
                       </span>
                     </li>
                     <li className="flex items-start">
                       <CheckCircle2 className="size-5 text-accent mr-2 flex-shrink-0 mt-0.5" />
-                      <span className="text-gray-700">
-                        Within your budget range of $800K - $900K
+                      <span className="text-muted-foreground">
+                        Within your budget range of ₹80L – ₹1.2Cr
                       </span>
                     </li>
                     <li className="flex items-start">
                       <CheckCircle2 className="size-5 text-accent mr-2 flex-shrink-0 mt-0.5" />
-                      <span className="text-gray-700">
+                      <span className="text-muted-foreground">
                         Features smart home technology aligned with your preferences
                       </span>
                     </li>
@@ -410,15 +435,15 @@ export function PropertyDetails() {
 
             {/* Description */}
             <Card>
-              <h3 className="font-semibold text-gray-900 mb-3">About this property</h3>
-              <p className="text-gray-700 leading-relaxed">{property.description || "No description available."}</p>
-              <div className="grid grid-cols-2 gap-4 mt-4 pt-4 border-t border-gray-200">
+              <h3 className="font-semibold text-foreground mb-3">About this property</h3>
+              <p className="text-muted-foreground leading-relaxed">{property.description || "No description available."}</p>
+              <div className="grid grid-cols-2 gap-4 mt-4 pt-4 border-t border-border">
                 <div>
-                  <p className="text-sm text-gray-600">Property Type</p>
+                  <p className="text-sm text-muted-foreground">Property Type</p>
                   <p className="font-medium capitalize">{property.propertyType.toLowerCase()}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-600">Year Built</p>
+                  <p className="text-sm text-muted-foreground">Year Built</p>
                   <p className="font-medium">{property.yearBuilt || "N/A"}</p>
                 </div>
               </div>
@@ -427,12 +452,12 @@ export function PropertyDetails() {
             {/* Amenities */}
             {amenities.length > 0 && (
               <Card>
-                <h3 className="font-semibold text-gray-900 mb-4">Amenities</h3>
+                <h3 className="font-semibold text-foreground mb-4">Amenities</h3>
                 <div className="grid grid-cols-2 gap-3">
                   {amenities.map((amenity: string, index: number) => (
                     <div key={index} className="flex items-center">
                       <CheckCircle2 className="size-5 text-accent mr-2" />
-                      <span className="text-gray-700">{amenity}</span>
+                      <span className="text-muted-foreground">{amenity}</span>
                     </div>
                   ))}
                 </div>
@@ -441,17 +466,17 @@ export function PropertyDetails() {
 
             {/* Nearby Places */}
             <Card>
-              <h3 className="font-semibold text-gray-900 mb-4">Nearby Places</h3>
+              <h3 className="font-semibold text-foreground mb-4">Nearby Places</h3>
               <div className="space-y-3">
                 {nearbyPlaces.map((place: any, index: number) => {
                   const Icon = place.icon;
                   return (
-                    <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                    <div key={index} className="flex items-center justify-between p-3 bg-secondary/50 rounded-lg">
                       <div className="flex items-center">
-                        <div className="size-10 bg-white rounded-lg flex items-center justify-center mr-3">
+                        <div className="size-10 bg-card rounded-lg flex items-center justify-center mr-3 shadow-soft">
                           <Icon className="size-5 text-primary" />
                         </div>
-                        <span className="text-gray-900">{place.name}</span>
+                        <span className="text-foreground">{place.name}</span>
                       </div>
                       <Badge variant="default" size="sm">{place.distance}</Badge>
                     </div>
@@ -465,8 +490,8 @@ export function PropertyDetails() {
           <div className="space-y-6">
             {/* Contact Card */}
             <Card>
-              <h3 className="font-semibold text-gray-900 mb-4">Interested in this property?</h3>
-              <p className="text-sm text-gray-600 mb-4">
+              <h3 className="font-semibold text-foreground mb-4">Interested in this property?</h3>
+              <p className="text-sm text-muted-foreground mb-4">
                 Express your interest and our AI will connect you with a verified agent
               </p>
               <div className="space-y-3">
@@ -484,14 +509,14 @@ export function PropertyDetails() {
                   Schedule Visit
                 </Button>
                 <Button variant="ghost" className="w-full" onClick={handleToggleSave}>
-                  <Heart className={`size-4 mr-2 ${saved ? 'fill-red-500 text-red-500' : 'text-gray-600'}`} />
+                  <Heart className={`size-4 mr-2 ${saved ? 'fill-red-500 text-red-500' : 'text-muted-foreground'}`} />
                   {saved ? "Saved" : "Save Property"}
                 </Button>
               </div>
               <div className="mt-4 p-3 bg-blue-50 rounded-lg">
                 <div className="flex items-start">
                   <Sparkles className="size-5 text-primary mr-2 flex-shrink-0 mt-0.5" />
-                  <p className="text-xs text-gray-700">
+                  <p className="text-xs text-muted-foreground">
                     Your contact information will remain private. All communications are monitored by our platform for your safety.
                   </p>
                 </div>
@@ -502,37 +527,37 @@ export function PropertyDetails() {
               <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
                 <div className="bg-white rounded-xl p-6 max-w-md w-full mx-4">
                   <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-xl font-semibold text-gray-900">Schedule a Visit</h3>
-                    <button onClick={() => setShowVisitDialog(false)} className="text-gray-500 hover:text-gray-700">
+                    <h3 className="text-xl font-semibold text-foreground">Schedule a Visit</h3>
+                    <button onClick={() => setShowVisitDialog(false)} className="text-muted-foreground hover:text-muted-foreground">
                       <X className="size-6" />
                     </button>
                   </div>
                   <div className="space-y-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Date</label>
+                      <label className="block text-sm font-medium text-muted-foreground mb-1">Date</label>
                       <input
                         type="date"
                         value={visitDate}
                         onChange={(e) => setVisitDate(e.target.value)}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+                        className="w-full px-4 py-2 border border-border rounded-lg bg-card text-foreground"
                         min={new Date().toISOString().split('T')[0]}
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Time</label>
+                      <label className="block text-sm font-medium text-muted-foreground mb-1">Time</label>
                       <input
                         type="time"
                         value={visitTime}
                         onChange={(e) => setVisitTime(e.target.value)}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+                        className="w-full px-4 py-2 border border-border rounded-lg bg-card text-foreground"
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Notes (Optional)</label>
+                      <label className="block text-sm font-medium text-muted-foreground mb-1">Notes (Optional)</label>
                       <textarea
                         value={visitNotes}
                         onChange={(e) => setVisitNotes(e.target.value)}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+                        className="w-full px-4 py-2 border border-border rounded-lg bg-card text-foreground"
                         rows={3}
                       />
                     </div>
@@ -564,8 +589,8 @@ export function PropertyDetails() {
                   {agentInitials}
                 </div>
                 <div>
-                  <p className="font-semibold text-gray-900">{agentName}</p>
-                  <p className="text-sm text-gray-600">Verified Agent</p>
+                  <p className="font-semibold text-foreground">{agentName}</p>
+                  <p className="text-sm text-muted-foreground">Verified Agent</p>
                 </div>
               </div>
               <div className="mb-3">
@@ -574,31 +599,35 @@ export function PropertyDetails() {
                 Platform Verified
               </Badge>
               </div>
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-muted-foreground">
                 This agent is verified and monitored by our platform for quality and transparency.
               </p>
             </Card>
 
             {/* Similar Properties */}
-            <Card>
-              <h3 className="font-semibold text-gray-900 mb-3">Similar Properties</h3>
-              <div className="space-y-3">
-                {[1, 2].map((i) => (
-                  <div key={i} className="flex space-x-3 p-2 hover:bg-gray-50 rounded-lg cursor-pointer transition-colors">
-                    <img
-                      src={`https://images.unsplash.com/photo-160060${i}685154340-be6161a56a0c?w=200`}
-                      alt=""
-                      className="size-20 rounded-lg object-cover"
-                    />
-                    <div>
-                      <p className="font-medium text-gray-900 text-sm">Modern Home</p>
-                      <p className="text-xs text-gray-600">San Francisco, CA</p>
-                      <p className="text-sm font-semibold text-gray-900 mt-1">$780,000</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </Card>
+            {similarProperties.length > 0 && (
+              <Card>
+                <h3 className="font-semibold text-foreground mb-3">Similar Properties</h3>
+                <div className="space-y-3">
+                  {similarProperties.map((simProp: any) => (
+                    <Link key={simProp.id} to={`/customer/property/${simProp.id}`}>
+                      <div className="flex space-x-3 p-2 hover:bg-secondary/50 rounded-lg cursor-pointer transition-colors">
+                        <img
+                          src={simProp.media?.[0]?.url || "https://images.unsplash.com/photo-160060685154340-be6161a56a0c?w=200"}
+                          alt={simProp.title}
+                          className="size-20 rounded-lg object-cover"
+                        />
+                        <div>
+                          <p className="font-medium text-foreground text-sm truncate max-w-[180px]">{simProp.title}</p>
+                          <p className="text-xs text-muted-foreground">{simProp.locality?.name || "Unknown Locality"}</p>
+                          <p className="text-sm font-semibold text-foreground mt-1">{formatPriceCompact(simProp.price)}</p>
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </Card>
+            )}
           </div>
         </div>
       </div>

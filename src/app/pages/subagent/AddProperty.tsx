@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router";
-import { Upload, MapPin, DollarSign, CheckCircle2, X } from "lucide-react";
+import { Upload, MapPin, IndianRupee, CheckCircle2, X, ArrowLeft } from "lucide-react";
 import { Button } from "../../components/Button";
 import { Card } from "../../components/Card";
 import { Badge } from "../../components/Badge";
@@ -207,15 +207,30 @@ export function AddProperty() {
     });
   };
 
+  const handleNext = () => {
+    if (currentStep === 0) {
+      if (!formData.title || !formData.propertyType || !formData.listingType || !formData.price || !formData.address) {
+        alert("Please fill in all mandatory fields (Title, Type, Listing Type, Price, Address) before proceeding.");
+        return;
+      }
+    }
+    setCurrentStep(currentStep + 1);
+  };
+
   return (
     <div className="p-8 bg-gray-50 min-h-screen">
       <div className="max-w-4xl mx-auto space-y-6">
         {/* Header */}
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">
-            {isEdit ? "Edit Property" : "Add New Property"}
-          </h1>
-          <p className="text-gray-600 mt-1">Fill in the details to list your property</p>
+        <div className="flex items-center gap-4 mb-4">
+          <Button variant="outline" size="icon" onClick={() => navigate(-1)}>
+            <ArrowLeft className="size-5" />
+          </Button>
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">
+              {isEdit ? "Edit Property" : "Add New Property"}
+            </h1>
+            <p className="text-gray-600 mt-1">Fill in the details to list your property</p>
+          </div>
         </div>
 
         {/* Progress Steps */}
@@ -318,7 +333,7 @@ export function AddProperty() {
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Price *</label>
                   <div className="relative">
-                    <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 size-5 text-gray-400" />
+                    <IndianRupee className="absolute left-3 top-1/2 transform -translate-y-1/2 size-5 text-gray-400" />
                     <input
                       type="text"
                       value={formData.price}
@@ -579,7 +594,7 @@ export function AddProperty() {
             Previous
           </Button>
           {currentStep < steps.length - 1 ? (
-            <Button onClick={() => setCurrentStep(currentStep + 1)}>
+            <Button onClick={handleNext}>
               Next
             </Button>
           ) : (

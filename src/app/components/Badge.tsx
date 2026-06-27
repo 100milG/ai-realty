@@ -8,13 +8,13 @@ interface BadgeProps {
 
 export function Badge({ children, variant = "default", size = "md" }: BadgeProps) {
   const variantClasses = {
-    default: "bg-gray-100 text-gray-700",
-    success: "bg-green-100 text-green-700",
-    warning: "bg-yellow-100 text-yellow-700",
-    danger: "bg-red-100 text-red-700",
-    info: "bg-blue-100 text-blue-700",
-    ai: "bg-gradient-to-r from-purple-100 to-blue-100 text-purple-700",
-    accent: "bg-accent text-accent-foreground",
+    default: "bg-secondary text-secondary-foreground",
+    success: "bg-emerald-500/15 text-emerald-700 dark:text-emerald-400",
+    warning: "bg-amber-500/15 text-amber-700 dark:text-amber-400",
+    danger: "bg-red-500/15 text-red-700 dark:text-red-400",
+    info: "bg-primary/10 text-primary",
+    ai: "bg-gradient-to-r from-primary/10 to-accent/15 text-primary border border-primary/10",
+    accent: "bg-accent/15 text-accent-foreground dark:text-accent",
   };
 
   const sizeClasses = {
@@ -23,7 +23,9 @@ export function Badge({ children, variant = "default", size = "md" }: BadgeProps
   };
 
   return (
-    <span className={`inline-flex items-center rounded-full font-medium ${variantClasses[variant]} ${sizeClasses[size]}`}>
+    <span
+      className={`inline-flex items-center rounded-full font-medium ${variantClasses[variant]} ${sizeClasses[size]}`}
+    >
       {children}
     </span>
   );

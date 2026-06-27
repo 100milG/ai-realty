@@ -30,17 +30,18 @@ const initialMessages: Message[] = [
 ];
 
 const suggestedQuestions = [
-  "I'm looking for a 3-bedroom home near good schools",
-  "Show me modern apartments under $800K",
-  "What's available in downtown San Francisco?",
-  "I need a family home with a backyard",
+  "I'm looking for a 3BHK near international schools in Whitefield",
+  "Show me luxury apartments under ₹1.5 Cr in Mumbai",
+  "What's available in Marina Bay, Singapore?",
+  "I need a villa with a garden and gated security",
 ];
 
 export function AIChat() {
   const location = useLocation();
-  const isCustomer = location.pathname.startsWith('/customer');
+  const isCustomer = location.pathname.startsWith("/customer");
+  const initialQuery = (location.state as { initialQuery?: string } | null)?.initialQuery;
   const [messages, setMessages] = useState<Message[]>(initialMessages);
-  const [input, setInput] = useState("");
+  const [input, setInput] = useState(initialQuery ?? "");
   const [isTyping, setIsTyping] = useState(false);
   const [extractedPreferences, setExtractedPreferences] = useState<string[]>([]);
   const [dbProperties, setDbProperties] = useState<any[]>([]);
@@ -73,7 +74,7 @@ export function AIChat() {
       const recs = dbProperties.slice(0, 2).map((p: any) => ({
         id: p.id,
         image: p.media?.[0]?.url || "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=400",
-        price: p.price ? `$${p.price.toLocaleString()}` : "Contact Agent",
+        price: p.price ? `₹${p.price.toLocaleString()}` : "Contact Agent",
         title: p.title,
         location: p.address || (p.locality ? `${p.locality.name}, ${p.locality.city}` : "Unknown Locality"),
         beds: p.beds || 0,
@@ -101,19 +102,19 @@ export function AIChat() {
   };
 
   return (
-    <div className="h-[calc(100vh-64px)] bg-gray-50 flex">
+    <div className="h-[calc(100vh-64px)] bg-background flex">
       {/* Chat Area */}
       <div className="flex-1 flex flex-col max-w-4xl mx-auto w-full">
         {/* Header */}
-        <div className="bg-white border-b border-gray-200 p-4">
+        <div className="bg-card border-b border-border p-4 shadow-soft">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <div className="size-10 bg-gradient-to-br from-primary to-accent rounded-lg flex items-center justify-center">
-                <Sparkles className="size-6 text-white" />
+              <div className="size-10 bg-gradient-brand rounded-xl flex items-center justify-center shadow-soft">
+                <Sparkles className="size-5 text-white" />
               </div>
               <div>
-                <h2 className="font-semibold text-gray-900">AI Real Estate Assistant</h2>
-                <p className="text-sm text-gray-600">Always here to help you find your dream home</p>
+                <h2 className="font-display font-semibold text-foreground">AI Real Estate Assistant</h2>
+                <p className="text-sm text-muted-foreground">Always here to help you find your dream home</p>
               </div>
             </div>
             <Badge variant="success" size="sm">Online</Badge>
@@ -127,20 +128,20 @@ export function AIChat() {
               <div className={`max-w-2xl ${message.role === "user" ? "ml-12" : "mr-12"}`}>
                 {message.role === "assistant" && (
                   <div className="flex items-center space-x-2 mb-2">
-                    <div className="size-8 bg-gradient-to-br from-primary to-accent rounded-lg flex items-center justify-center">
+                    <div className="size-8 bg-gradient-brand rounded-lg flex items-center justify-center">
                       <Sparkles className="size-4 text-white" />
                     </div>
-                    <span className="text-sm font-medium text-gray-700">AI Assistant</span>
+                    <span className="text-sm font-medium text-muted-foreground">AI Assistant</span>
                   </div>
                 )}
                 <div
                   className={`rounded-2xl p-4 ${
                     message.role === "user"
-                      ? "bg-primary text-white"
-                      : "bg-white border border-gray-200 shadow-sm"
+                      ? "bg-primary text-primary-foreground"
+                      : "bg-card border border-border shadow-soft"
                   }`}
                 >
-                  <p className={message.role === "user" ? "text-white" : "text-gray-700"}>
+                  <p className={message.role === "user" ? "text-primary-foreground" : "text-foreground"}>
                     {message.content}
                   </p>
                 </div>
@@ -150,7 +151,7 @@ export function AIChat() {
                   <div className="grid md:grid-cols-2 gap-4 mt-4">
                     {message.properties.map((property) => (
                       <Link key={property.id} to={isCustomer ? `/customer/property/${property.id}` : `/property/${property.id}`}>
-                        <div className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow">
+                        <div className="bg-card rounded-xl border border-border overflow-hidden hover:shadow-elevated transition-all hover:-translate-y-0.5">
                           <div className="relative h-32">
                             <img src={property.image} alt={property.title} className="size-full object-cover" />
                             <div className="absolute top-2 right-2">
@@ -160,13 +161,13 @@ export function AIChat() {
                             </div>
                           </div>
                           <div className="p-3">
-                            <p className="text-lg font-semibold text-gray-900">{property.price}</p>
-                            <p className="text-sm font-medium text-gray-900 mt-1">{property.title}</p>
-                            <div className="flex items-center text-xs text-gray-600 mt-1">
+                            <p className="text-lg font-semibold text-foreground font-numeric">{property.price}</p>
+                            <p className="text-sm font-medium text-foreground mt-1">{property.title}</p>
+                            <div className="flex items-center text-xs text-muted-foreground mt-1">
                               <MapPin className="size-3 mr-1" />
                               {property.location}
                             </div>
-                            <div className="flex items-center space-x-3 text-xs text-gray-600 mt-2">
+                            <div className="flex items-center space-x-3 text-xs text-muted-foreground mt-2">
                               <span className="flex items-center">
                                 <Bed className="size-3 mr-1" />
                                 {property.beds}
@@ -189,7 +190,7 @@ export function AIChat() {
 
                 {message.role === "user" && (
                   <div className="flex justify-end mt-1">
-                    <span className="text-xs text-gray-500">You</span>
+                    <span className="text-xs text-muted-foreground">You</span>
                   </div>
                 )}
               </div>
@@ -200,14 +201,14 @@ export function AIChat() {
           {isTyping && (
             <div className="flex justify-start">
               <div className="flex items-center space-x-2">
-                <div className="size-8 bg-gradient-to-br from-primary to-accent rounded-lg flex items-center justify-center">
+                <div className="size-8 bg-gradient-brand rounded-lg flex items-center justify-center">
                   <Sparkles className="size-4 text-white" />
                 </div>
-                <div className="bg-white border border-gray-200 rounded-2xl px-4 py-3">
+                <div className="bg-card border border-border rounded-2xl px-4 py-3 shadow-soft">
                   <div className="flex space-x-1">
-                    <div className="size-2 bg-gray-400 rounded-full animate-bounce" />
-                    <div className="size-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: "0.1s" }} />
-                    <div className="size-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: "0.2s" }} />
+                    <div className="size-2 bg-muted-foreground/40 rounded-full animate-bounce" />
+                    <div className="size-2 bg-muted-foreground/40 rounded-full animate-bounce" style={{ animationDelay: "0.1s" }} />
+                    <div className="size-2 bg-muted-foreground/40 rounded-full animate-bounce" style={{ animationDelay: "0.2s" }} />
                   </div>
                 </div>
               </div>
@@ -217,13 +218,13 @@ export function AIChat() {
           {/* Suggested Questions */}
           {messages.length === 1 && (
             <div className="space-y-3">
-              <p className="text-sm text-gray-600 text-center">Or try one of these:</p>
+              <p className="text-sm text-muted-foreground text-center">Or try one of these:</p>
               <div className="grid md:grid-cols-2 gap-3">
                 {suggestedQuestions.map((question, index) => (
                   <button
                     key={index}
                     onClick={() => handleSuggestion(question)}
-                    className="p-3 bg-white border border-gray-200 rounded-lg text-left text-sm text-gray-700 hover:bg-gray-50 hover:border-primary transition-colors"
+                    className="p-3.5 bg-card border border-border rounded-xl text-left text-sm text-foreground hover:bg-secondary hover:border-primary/30 transition-colors"
                   >
                     {question}
                   </button>
@@ -234,9 +235,9 @@ export function AIChat() {
         </div>
 
         {/* Input Area */}
-        <div className="bg-white border-t border-gray-200 p-4">
+        <div className="bg-card border-t border-border p-4">
           <div className="flex items-center space-x-3">
-            <div className="flex-1 flex items-center bg-gray-100 rounded-xl px-4 py-3">
+            <div className="flex-1 flex items-center bg-input-background rounded-xl px-4 py-3 border border-border focus-within:ring-2 focus-within:ring-ring/30">
               <input
                 type="text"
                 value={input}
@@ -254,25 +255,25 @@ export function AIChat() {
       </div>
 
       {/* Preferences Sidebar */}
-      <aside className="w-80 bg-white border-l border-gray-200 p-6 hidden lg:block">
-        <h3 className="font-semibold text-gray-900 mb-4">Extracted Preferences</h3>
+      <aside className="w-80 bg-card border-l border-border p-6 hidden lg:block">
+        <h3 className="font-display font-semibold text-foreground mb-4">Extracted Preferences</h3>
         {extractedPreferences.length > 0 ? (
           <div className="space-y-2">
             {extractedPreferences.map((pref, index) => (
-              <div key={index} className="flex items-center justify-between p-3 bg-purple-50 rounded-lg">
-                <span className="text-sm text-gray-700">{pref}</span>
+              <div key={index} className="flex items-center justify-between p-3 bg-primary/5 rounded-xl border border-primary/10">
+                <span className="text-sm text-foreground">{pref}</span>
                 <Badge variant="ai" size="sm">AI</Badge>
               </div>
             ))}
           </div>
         ) : (
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-muted-foreground">
             Start chatting and I'll learn your preferences automatically
           </p>
         )}
 
         <div className="mt-8">
-          <h3 className="font-semibold text-gray-900 mb-4">Quick Actions</h3>
+          <h3 className="font-display font-semibold text-foreground mb-4">Quick Actions</h3>
           <div className="space-y-2">
             <Link to={isCustomer ? "/customer/search" : "/search"}>
               <Button variant="outline" className="w-full justify-start">

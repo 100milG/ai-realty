@@ -1,107 +1,112 @@
-# Setup Guide
+# 🛠️ Local Machine Setup Guide
 
+Follow this guide to configure and run the **AI Realty Platform** on your local workstation.
 
-## 🛠️ Prerequisites
+---
 
- * **Node.js** (v18.0.0 or higher) - [Download Node.js](https://nodejs.org/)
-* **PostgreSQL** (v14.0.0 or higher) - [Download PostgreSQL](https://www.postgresql.org/)
- 
+## 📋 Prerequisites
+
+Ensure you have the following installed on your machine:
+*   **Node.js** (v18.0.0 or higher) — [Download](https://nodejs.org/)
+*   **PostgreSQL** (v14.0.0 or higher) — [Download](https://www.postgresql.org/)
+*   **Git** — [Download](https://git-scm.com/)
+
 ---
 
 ## 🚀 Step-by-Step Installation
 
-### 1. Configure the Database
-1. Open your PostgreSQL terminal (`psql`) or database manager (like PgAdmin or DBeaver).
-2. Create a new database named `ai_realty`:
-   ```sql
-   CREATE DATABASE ai_realty;
-   ```
+### Step 1: Database Initialization
+1.  Open your PostgreSQL shell (`psql`) or database GUI manager (e.g., pgAdmin, DBeaver, TablePlus).
+2.  Execute the following command to create a clean database:
+    ```sql
+    CREATE DATABASE ai_realty;
+    ```
 
-### 2. Configure Backend Environment
-1. Navigate to the `server/` directory:
-   ```bash
-   cd server
-   ```
-2. Copy the `.env.example` template to a new file named `.env`:
-   ```bash
-   cp .env.example .env
-   ```
-3. Open `server/.env` and update the `DATABASE_URL` with your local PostgreSQL password:
-   ```env
-   DATABASE_URL="postgresql://postgres:YOUR_PASSWORD@localhost:5432/ai_realty?schema=public"
-   ```
+### Step 2: Backend Configuration
+1.  Navigate into the `server` directory:
+    ```bash
+    cd server
+    ```
+2.  Duplicate the environment template file:
+    ```bash
+    cp .env.example .env
+    ```
+3.  Open the newly created `server/.env` and update the connection URL and JWT secret:
+    ```env
+    PORT=5000
+    DATABASE_URL="postgresql://postgres:YOUR_PG_PASSWORD@localhost:5432/ai_realty?schema=public"
+    JWT_SECRET="generate_a_secure_random_string_here"
+    ```
+    > [!IMPORTANT]
+    > Replace `YOUR_PG_PASSWORD` with the actual password for your local PostgreSQL `postgres` user.
 
-### 3. Install Backend Dependencies & Sync DB Schema
-1. Install node dependencies for the Express backend:
-   ```bash
-   npm install
-   ```
-2. Generate the local **Prisma Client** and push the database schema:
-   ```bash
-   npx prisma generate
-   npx prisma db push
-   ```
-3. Run the database seed script to populate mock properties, agents, active inquiries, chat histories, and settings matching the development workspace state:
-   ```bash
-   npm run seed
-   ```
+### Step 3: Backend Node Dependencies & Migration
+1.  Install backend packages:
+    ```bash
+    npm install
+    ```
+2.  Compile schema models and run migrations to build the tables:
+    ```bash
+    npm run prisma:generate
+    npm run prisma:migrate
+    ```
+3.  Seed the database with default personas, mocked active listings, geocoded locality metadata, and inquiry records:
+    ```bash
+    npm run seed
+    ```
 
-### 4. Install Frontend Dependencies
-1. Navigate back to the workspace root directory:
-   ```bash
-   cd ..
-   ```
-2. Install client dependencies:
-   ```bash
-   npm install
-   ```
-
----
-
-## 💻 Running the Application
-
-To run the application, you need to start both the frontend Vite dev server and the backend Express dev server.
-
-### Start the Backend Server
-1. Navigate to the `server/` folder:
-   ```bash
-   cd server
-   ```
-2. Start the backend:
-   ```bash
-   npm run dev
-   ```
-   *The backend server will launch and listen on **`http://localhost:5000`**.*
-
-### Start the Frontend Client
-1. Open a new terminal tab and navigate to the project root directory.
-2. Start the client:
-   ```bash
-   npm run dev
-   ```
-   *The client dev server will launch and listen on **`http://localhost:5173`** (or **`http://localhost:5174`**).*
+### Step 4: Frontend Workspace Setup
+1.  Navigate back to the project root directory:
+    ```bash
+    cd ..
+    ```
+2.  Install frontend dependencies:
+    ```bash
+    npm install
+    ```
 
 ---
 
-## 🔑 Development Credentials (Quick-Login)
+## 💻 Running the Applications Locally
 
-When you open **`http://localhost:5173/`** in your browser, click **Sign in** in the top right. You can quickly log in using the development shortcuts at the bottom of the login form, or use the email/password combinations below:
+You will need **two terminal tabs/windows** running at the same time to work locally.
 
-* **Customer Portal Evaluation:**
-  * **Email:** `sarah@example.com`
-  * **Password:** `password123`
-* **Subagent Portal Evaluation:**
-  * **Email:** `john@example.com`
-  * **Password:** `password123`
-* **Admin Portal Evaluation:**
-  * **Email:** `admin@example.com`
-  * **Password:** `password123`
+### Terminal 1: Express API Server
+Navigate to the `server` directory and start the hot-reloading server:
+```bash
+cd server
+npm run dev
+```
+*   The API server will listen at: `http://localhost:5000`
+*   Verify server health: `http://localhost:5000/api/health`
+
+### Terminal 2: React Vite Development Server
+From the project root directory, run the Vite asset bundler:
+```bash
+npm run dev
+```
+*   The Vite local server will start, typically at: `http://localhost:5173`
+*   Open the link in your browser to view the application.
 
 ---
 
-## 🧪 Verification Plan
+## 🔑 Default Accounts (Quick-Login)
 
-To confirm the platform is set up correctly, check the following flows:
-1. **Landing Page:** Open `http://localhost:5173/`. You should see the **Featured Properties** section load active listings dynamically queried from your database rather than static variables.
-2. **Subagent Form Geocoding:** Log in as John Doe (Subagent), go to **Property Management** -> **Add New Property**. Under the address field, search for a location (e.g. `1600 Amphitheatre Pkwy`). Select the geocoded suggestion and verify that the latitude/longitude coordinates are captured. Submit the form and check that it redirects to the listings table.
-3. **Role Validation (RBAC):** While logged in as Customer (Sarah), try navigating to `http://localhost:5173/admin/dashboard` in the address bar. Verify that you are immediately redirected back to the customer dashboard.
+When you access the login screen, you can click the quick-login shortcut buttons at the bottom of the form, or manually type the following credentials:
+
+| Role | Email Address | Password | Functionality |
+| :--- | :--- | :--- | :--- |
+| **Customer** | `priya@example.com` | `password123` | Search properties, save favorites, chat with agents & AI |
+| **Subagent** | `raj@example.com` | `password123` | Post/update listings, manage leads, update profiles |
+| **Admin** | `admin@example.com` | `password123` | Moderate properties, verify agents, audit chat logs |
+| **Testing Subagent** | `agent_testing@example.com` | `password123` | Upload KYC documents, check geocoding |
+
+---
+
+## 🧪 Manual Verification Plan
+
+Verify that your installation is fully functional by checking these core mechanisms:
+
+1.  **Dynamic Loading:** Open `http://localhost:5173/`. Ensure the featured properties section is loaded dynamically from the PostgreSQL database (it should not show empty cards).
+2.  **Geocoding Check:** Log in as Raj (Subagent). Navigate to **Property Management** -> **Add New Property**. Type a real address (e.g., `1600 Amphitheatre Pkwy, Mountain View`). Select the suggested location to ensure map latitude and longitude fields fill in automatically. Save the property.
+3.  **Role Guard (RBAC):** While logged in as Priya (Customer), attempt to navigate to `http://localhost:5173/admin/dashboard` in the address bar. Verify that the application redirects you back to the customer dashboard automatically.
