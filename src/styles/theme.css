@@ -53,6 +53,9 @@
   --gradient-brand: linear-gradient(135deg, #1A535C 0%, #2D6A6F 50%, #C8956C 100%);
   --shadow-soft: 0 1px 3px rgba(28, 27, 31, 0.06), 0 8px 24px rgba(28, 27, 31, 0.04);
   --shadow-elevated: 0 4px 6px rgba(28, 27, 31, 0.04), 0 20px 40px rgba(28, 27, 31, 0.08);
+
+  --glass-bg: rgba(255, 255, 255, 0.6);
+  --glass-border: rgba(255, 255, 255, 0.3);
 }
 
 .dark {
@@ -99,6 +102,9 @@
   --gradient-brand: linear-gradient(135deg, #4DA8B8 0%, #2D6A6F 50%, #D4A574 100%);
   --shadow-soft: 0 1px 3px rgba(0, 0, 0, 0.2), 0 8px 24px rgba(0, 0, 0, 0.15);
   --shadow-elevated: 0 4px 6px rgba(0, 0, 0, 0.15), 0 20px 40px rgba(0, 0, 0, 0.25);
+
+  --glass-bg: rgba(26, 30, 34, 0.6);
+  --glass-border: rgba(245, 242, 237, 0.05);
 }
 
 @theme inline {
@@ -237,5 +243,19 @@
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
+  }
+
+  .glass {
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+  }
+
+  .glass-heavy {
+    background: var(--glass-bg);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid var(--glass-border);
   }
 }

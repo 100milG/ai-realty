@@ -1,5 +1,6 @@
 import { Link, useLocation } from "react-router";
 import { MapPin, Bed, Bath, Maximize, Sparkles, ArrowUpRight } from "lucide-react";
+import { motion } from "motion/react";
 import { Badge } from "./Badge";
 
 interface PropertyCardProps {
@@ -33,31 +34,35 @@ export function PropertyCard({
 
   return (
     <Link to={detailsPath} className="group block">
-      <article className="bg-card rounded-xl border border-border overflow-hidden shadow-soft hover:shadow-elevated transition-all duration-300 hover:-translate-y-0.5">
-        <div className="relative h-52 overflow-hidden">
+      <motion.article 
+        whileHover={{ y: -4 }}
+        transition={{ duration: 0.3 }}
+        className="bg-card rounded-2xl border border-border overflow-hidden shadow-soft hover:shadow-elevated transition-all duration-300"
+      >
+        <div className="relative h-56 overflow-hidden">
           <img
             src={image}
             alt={title}
-            className="size-full object-cover transition-transform duration-500 group-hover:scale-105"
+            className="size-full object-cover transition-transform duration-700 group-hover:scale-110"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent opacity-80 group-hover:opacity-100 transition-opacity duration-500" />
           {aiScore && (
-            <div className="absolute top-3 right-3">
-              <Badge variant="ai" size="sm">
+            <div className="absolute top-3 right-3 z-10">
+              <Badge variant="ai" size="sm" className="glass border-none shadow-sm font-medium">
                 <Sparkles className="size-3 mr-1" />
                 {aiScore}% Match
               </Badge>
             </div>
           )}
-          <div className="absolute bottom-3 right-3 size-8 bg-card/90 backdrop-blur-sm rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-            <ArrowUpRight className="size-4 text-foreground" />
+          <div className="absolute bottom-4 right-4 size-10 glass rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300">
+            <ArrowUpRight className="size-5 text-white" />
+          </div>
+          <div className="absolute bottom-4 left-4 right-16">
+            <span className="text-2xl font-semibold text-white font-numeric drop-shadow-sm">{price}</span>
           </div>
         </div>
         <div className="p-5">
-          <div className="flex items-start justify-between gap-2 mb-2">
-            <span className="text-xl font-semibold text-foreground font-numeric">{price}</span>
-          </div>
-          <h3 className="font-medium text-foreground mb-1.5 line-clamp-1">{title}</h3>
+          <h3 className="font-medium text-foreground mb-1.5 line-clamp-1 text-lg">{title}</h3>
           <div className="flex items-center text-sm text-muted-foreground mb-4">
             <MapPin className="size-3.5 mr-1 shrink-0" />
             <span className="line-clamp-1">{location}</span>
@@ -77,12 +82,12 @@ export function PropertyCard({
             </div>
           </div>
           {aiReason && (
-            <div className="mt-3 p-2.5 bg-primary/5 rounded-lg border border-primary/10">
-              <p className="text-xs text-muted-foreground line-clamp-2">{aiReason}</p>
+            <div className="mt-4 p-3 bg-gradient-to-r from-primary/5 to-transparent rounded-xl border border-primary/10">
+              <p className="text-xs text-muted-foreground leading-relaxed line-clamp-2">{aiReason}</p>
             </div>
           )}
         </div>
-      </article>
+      </motion.article>
     </Link>
   );
 }

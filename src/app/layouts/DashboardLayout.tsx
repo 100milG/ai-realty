@@ -140,43 +140,6 @@ export function DashboardLayout() {
             );
           })}
 
-          {(userRole === "ADMIN" || userRole === "SUBAGENT") && (
-            <div className="pt-4 mt-4 border-t border-sidebar-border">
-              <p className="px-3 mb-2 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
-                Switch Portal
-              </p>
-              {!isCustomer && (
-                <Link
-                  to="/customer/dashboard"
-                  onClick={() => setSidebarOpen(false)}
-                  className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors"
-                >
-                  <Users className="size-4" />
-                  <span>Customer</span>
-                </Link>
-              )}
-              {!isSubagent && (
-                <Link
-                  to="/subagent/dashboard"
-                  onClick={() => setSidebarOpen(false)}
-                  className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors"
-                >
-                  <Building2 className="size-4" />
-                  <span>Subagent</span>
-                </Link>
-              )}
-              {userRole === "ADMIN" && !isAdmin && (
-                <Link
-                  to="/admin/dashboard"
-                  onClick={() => setSidebarOpen(false)}
-                  className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors"
-                >
-                  <Shield className="size-4" />
-                  <span>Admin</span>
-                </Link>
-              )}
-            </div>
-          )}
         </nav>
 
         <div className="p-3 border-t border-sidebar-border space-y-1">

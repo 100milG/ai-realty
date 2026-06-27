@@ -207,6 +207,16 @@ export function AddProperty() {
     });
   };
 
+  const handleNext = () => {
+    if (currentStep === 0) {
+      if (!formData.title || !formData.propertyType || !formData.listingType || !formData.price || !formData.address) {
+        alert("Please fill in all mandatory fields (Title, Type, Listing Type, Price, Address) before proceeding.");
+        return;
+      }
+    }
+    setCurrentStep(currentStep + 1);
+  };
+
   return (
     <div className="p-8 bg-gray-50 min-h-screen">
       <div className="max-w-4xl mx-auto space-y-6">
@@ -579,7 +589,7 @@ export function AddProperty() {
             Previous
           </Button>
           {currentStep < steps.length - 1 ? (
-            <Button onClick={() => setCurrentStep(currentStep + 1)}>
+            <Button onClick={handleNext}>
               Next
             </Button>
           ) : (

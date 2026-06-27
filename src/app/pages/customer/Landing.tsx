@@ -176,14 +176,14 @@ export function CustomerLanding() {
       <section className="relative bg-gradient-hero">
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <motion.div
-            animate={{ y: [0, -12, 0], opacity: [0.4, 0.6, 0.4] }}
+            animate={{ y: [0, -15, 0], opacity: [0.3, 0.5, 0.3], scale: [1, 1.05, 1] }}
             transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute -top-24 -right-24 size-96 bg-primary/5 rounded-full blur-3xl"
+            className="absolute -top-32 -right-24 size-[32rem] bg-primary/15 rounded-full blur-3xl mix-blend-multiply dark:mix-blend-screen"
           />
           <motion.div
-            animate={{ y: [0, 16, 0], opacity: [0.3, 0.5, 0.3] }}
+            animate={{ y: [0, 20, 0], opacity: [0.2, 0.4, 0.2], scale: [1, 1.1, 1] }}
             transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-            className="absolute -bottom-32 -left-32 size-96 bg-accent/10 rounded-full blur-3xl"
+            className="absolute -bottom-40 -left-32 size-[32rem] bg-accent/20 rounded-full blur-3xl mix-blend-multiply dark:mix-blend-screen"
           />
         </div>
 
@@ -210,9 +210,10 @@ export function CustomerLanding() {
               </motion.p>
 
               <motion.div
-                className="bg-card rounded-2xl shadow-elevated p-2 border border-border transition-shadow hover:shadow-elevated mb-4"
+                className="glass-heavy rounded-2xl shadow-elevated p-2 border border-white/40 dark:border-white/10 transition-all duration-300 hover:shadow-[0_8px_30px_rgba(26,83,92,0.12)] mb-4 group relative overflow-hidden"
                 variants={fadeInUp}
               >
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 ease-in-out pointer-events-none dark:via-white/5" />
                 <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
                   <div className="flex items-center flex-1 px-3">
                     <Sparkles className="size-5 text-primary shrink-0" />
@@ -242,10 +243,10 @@ export function CustomerLanding() {
                     key={suggestion}
                     type="button"
                     onClick={() => setAiQuery(suggestion)}
-                    className={`text-xs px-3 py-1.5 rounded-full border-2 transition-colors cursor-pointer ${
+                    className={`text-xs px-3 py-1.5 rounded-full border transition-colors cursor-pointer ${
                       aiQuery === suggestion
-                        ? "border-primary bg-primary/10 text-primary font-medium"
-                        : "border-border bg-secondary/60 text-muted-foreground hover:text-foreground hover:border-primary/30 hover:bg-primary/5"
+                        ? "glass border-primary bg-primary/10 text-primary font-medium shadow-sm"
+                        : "glass border-border/40 text-muted-foreground hover:text-foreground hover:border-primary/30 hover:bg-white/40 dark:hover:bg-white/5"
                     }`}
                   >
                     {suggestion}
@@ -283,11 +284,11 @@ export function CustomerLanding() {
                     alt="Luxury property"
                     className="size-full object-cover transition-transform duration-700 hover:scale-105"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-                  <div className="absolute bottom-4 left-4 right-4">
-                    <p className="text-white/80 text-xs mb-0.5">Featured · Mumbai</p>
-                    <p className="text-white text-lg font-display font-semibold">Skyline Residences</p>
-                    <p className="text-accent text-sm font-medium mt-0.5">₹7.1 Cr · 100% Match</p>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
+                  <div className="absolute bottom-4 left-4 right-4 glass p-4 rounded-xl border border-white/20 shadow-lg">
+                    <p className="text-white/80 text-xs mb-1 uppercase tracking-wider font-semibold">Featured · Mumbai</p>
+                    <p className="text-white text-xl font-display font-semibold mb-2">Skyline Residences</p>
+                    <p className="text-primary-foreground text-sm font-medium bg-primary inline-flex px-2.5 py-1 rounded-md shadow-sm">₹7.1 Cr · 100% Match</p>
                   </div>
                 </motion.div>
                 <motion.div

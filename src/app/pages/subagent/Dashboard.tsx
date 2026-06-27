@@ -192,9 +192,9 @@ export function SubagentDashboard() {
           </div>
         </Card>
 
-        <div className="grid lg:grid-cols-3 gap-8">
+        <div className="grid lg:grid-cols-2 gap-8">
           {/* Recent Leads */}
-          <div className="lg:col-span-2">
+          <div className="lg:col-span-1">
             <Card>
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-xl font-semibold text-foreground mb-6 font-display">Recent Leads</h2>
@@ -205,8 +205,8 @@ export function SubagentDashboard() {
               {leads.length === 0 ? (
                 <p className="text-muted-foreground text-center py-6">No leads assigned yet.</p>
               ) : (
-                <div className="space-y-2">
-                  {leads.slice(0, 3).map((lead) => {
+                <div className="space-y-2 overflow-y-auto max-h-[400px] pr-2 custom-scrollbar">
+                  {leads.map((lead) => {
                     const customerName = lead.customer?.name || "Customer";
                     const propertyTitle = lead.property?.title || "Property";
                     const initials = customerName.split(" ").map((n: string) => n[0]).join("");
@@ -253,7 +253,7 @@ export function SubagentDashboard() {
               {myProperties.length === 0 ? (
                 <p className="text-gray-500 text-center py-6">No listed properties.</p>
               ) : (
-                <div className="space-y-4">
+                <div className="space-y-4 overflow-y-auto max-h-[400px] pr-2 custom-scrollbar">
                   {myProperties.map((property) => (
                     <div key={property.id} className="pb-4 border-b border-gray-100 last:border-0">
                       <div className="flex items-center justify-between mb-2">
