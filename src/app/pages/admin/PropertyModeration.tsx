@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
-import { CheckCircle, X, Flag, Eye } from "lucide-react";
+import { CheckCircle, X, Eye } from "lucide-react";
 import { Badge } from "../../components/Badge";
 import { Button } from "../../components/Button";
 
@@ -96,12 +96,12 @@ export function PropertyModeration() {
   };
 
   return (
-    <div className="p-8 bg-gray-900 min-h-screen text-white">
+    <div className="p-8 bg-background min-h-screen text-foreground">
       <div className="max-w-7xl mx-auto space-y-6">
         {/* Header */}
         <div>
           <h1 className="text-3xl font-bold">Property Moderation</h1>
-          <p className="text-gray-400 mt-1">Review and approve property listings submitted by agents</p>
+          <p className="text-muted-foreground mt-1">Review and approve property listings submitted by agents</p>
         </div>
 
         {/* Filters */}
@@ -116,8 +116,8 @@ export function PropertyModeration() {
               onClick={() => setFilter(tab.key as any)}
               className={`px-4 py-2 rounded-lg font-medium transition-colors ${
                 filter === tab.key
-                  ? "bg-blue-600 text-white"
-                  : "bg-gray-800 text-gray-400 hover:bg-gray-700 border border-gray-700"
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-secondary text-muted-foreground hover:bg-secondary/80 border border-border"
               }`}
             >
               {tab.label}
@@ -130,11 +130,11 @@ export function PropertyModeration() {
           <div className={`lg:col-span-2 space-y-4 ${selectedProperty ? "hidden lg:block" : "block"}`}>
             {loading ? (
               <div className="flex justify-center items-center py-20">
-                <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-500"></div>
+                <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary"></div>
               </div>
             ) : properties.length === 0 ? (
-              <div className="text-center py-20 bg-gray-855 border border-gray-700 rounded-xl">
-                <p className="text-gray-400">No properties found in this tab.</p>
+              <div className="text-center py-20 glass rounded-2xl shadow-soft">
+                <p className="text-muted-foreground">No properties found in this tab.</p>
               </div>
             ) : (
               properties.map((property) => {
@@ -148,10 +148,10 @@ export function PropertyModeration() {
                 return (
                   <div
                     key={property.id}
-                    className={`bg-gray-800 rounded-xl border overflow-hidden cursor-pointer transition-all ${
+                    className={`glass rounded-2xl shadow-soft overflow-hidden cursor-pointer transition-all ${
                       selectedProperty?.id === property.id
-                        ? "border-blue-500 ring-2 ring-blue-500/50"
-                        : "border-gray-700 hover:border-gray-600"
+                        ? "ring-2 ring-primary/50"
+                        : "hover:shadow-elevated"
                     }`}
                     onClick={() => setSelectedProperty(property)}
                   >
@@ -164,26 +164,26 @@ export function PropertyModeration() {
                       <div className="flex-1 p-4">
                         <div className="flex items-start justify-between mb-3">
                           <div>
-                            <h3 className="font-semibold text-white text-lg">{property.title}</h3>
-                            <p className="text-sm text-gray-400">{propertyLocation}</p>
+                            <h3 className="font-semibold text-foreground text-lg">{property.title}</h3>
+                            <p className="text-sm text-muted-foreground">{propertyLocation}</p>
                           </div>
                           <Badge variant={property.status === "ACTIVE" ? "success" : property.status === "PENDING_APPROVAL" ? "warning" : "danger"} size="sm">
                             {property.status}
                           </Badge>
                         </div>
 
-                        <p className="text-2xl font-bold text-white mb-3 font-numeric">{formattedPrice}</p>
+                        <p className="text-2xl font-bold text-foreground mb-3 font-numeric">{formattedPrice}</p>
 
-                        <div className="flex items-center space-x-4 text-sm text-gray-400 mb-3">
+                        <div className="flex items-center space-x-4 text-sm text-muted-foreground mb-3">
                           <span>{property.beds || 0} beds</span>
                           <span>{property.baths || 0} baths</span>
                           <span>{property.sqft || 0} sqft</span>
                         </div>
 
-                        <div className="flex items-center justify-between pt-3 border-t border-gray-700">
+                        <div className="flex items-center justify-between pt-3 border-t border-border">
                           <div>
-                            <p className="text-xs text-gray-400">Listed by {agentName}</p>
-                            <p className="text-xs text-gray-500">{formattedTime}</p>
+                            <p className="text-xs text-muted-foreground">Listed by {agentName}</p>
+                            <p className="text-xs text-muted-foreground/70">{formattedTime}</p>
                           </div>
                           {property.status === "PENDING_APPROVAL" && (
                             <div className="flex items-center space-x-2" onClick={(e) => e.stopPropagation()}>
@@ -198,7 +198,7 @@ export function PropertyModeration() {
                                 variant="outline"
                                 size="sm"
                                 onClick={() => handleReject(property.id)}
-                                className="text-red-400 border-red-400 hover:bg-red-400/10"
+                                className="text-red-500 dark:text-red-400 border-red-400/50 hover:bg-red-500/10"
                               >
                                 <X className="size-4" />
                               </Button>
@@ -214,7 +214,7 @@ export function PropertyModeration() {
           </div>
 
           {/* Property Details */}
-          <div className={`bg-gray-800 rounded-xl border border-gray-700 p-6 ${selectedProperty ? "block" : "hidden lg:block"}`}>
+          <div className={`glass rounded-2xl shadow-soft p-6 ${selectedProperty ? "block" : "hidden lg:block"}`}>
             {selectedProperty ? (
               <div className="space-y-6">
                 <div>
@@ -225,50 +225,50 @@ export function PropertyModeration() {
                     >
                       ← Back
                     </button>
-                    <h2 className="text-xl font-semibold text-white">Property Details</h2>
+                    <h2 className="text-xl font-semibold text-foreground">Property Details</h2>
                   </div>
                   <img
                     src={selectedProperty.media?.[0]?.url || "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=400"}
                     alt={selectedProperty.title}
                     className="w-full h-48 object-cover rounded-lg mb-4"
                   />
-                  <h3 className="font-semibold text-white text-lg mb-2">{selectedProperty.title}</h3>
-                  <p className="text-sm text-gray-400 mb-3">
+                  <h3 className="font-semibold text-foreground text-lg mb-2">{selectedProperty.title}</h3>
+                  <p className="text-sm text-muted-foreground mb-3">
                     {selectedProperty.address || (selectedProperty.locality ? `${selectedProperty.locality.name}, ${selectedProperty.locality.city}` : "Unknown Locality")}
                   </p>
-                  <p className="text-3xl font-bold text-white mb-4 font-numeric">
+                  <p className="text-3xl font-bold text-foreground mb-4 font-numeric">
                     {selectedProperty.price ? `₹${selectedProperty.price.toLocaleString()}` : "Contact Agent"}
                   </p>
                 </div>
 
-                <div className="grid grid-cols-4 gap-3 pb-4 border-b border-gray-700">
+                <div className="grid grid-cols-4 gap-3 pb-4 border-b border-border">
                   <div>
-                    <p className="text-xs text-gray-400">Bedrooms</p>
-                    <p className="text-lg font-semibold text-white font-numeric">{selectedProperty.beds || 0}</p>
+                    <p className="text-xs text-muted-foreground">Bedrooms</p>
+                    <p className="text-lg font-semibold text-foreground font-numeric">{selectedProperty.beds || 0}</p>
                   </div>
                   <div>
-                    <p className="text-xs text-gray-400">Bathrooms</p>
-                    <p className="text-lg font-semibold text-white">{selectedProperty.baths || 0}</p>
+                    <p className="text-xs text-muted-foreground">Bathrooms</p>
+                    <p className="text-lg font-semibold text-foreground">{selectedProperty.baths || 0}</p>
                   </div>
                   <div>
-                    <p className="text-xs text-gray-400">Sqft</p>
-                    <p className="text-lg font-semibold text-white">{selectedProperty.sqft || 0}</p>
+                    <p className="text-xs text-muted-foreground">Sqft</p>
+                    <p className="text-lg font-semibold text-foreground">{selectedProperty.sqft || 0}</p>
                   </div>
                   <div>
-                    <p className="text-xs text-gray-400">Year Built</p>
-                    <p className="text-lg font-semibold text-white">{selectedProperty.yearBuilt || "N/A"}</p>
+                    <p className="text-xs text-muted-foreground">Year Built</p>
+                    <p className="text-lg font-semibold text-foreground">{selectedProperty.yearBuilt || "N/A"}</p>
                   </div>
                 </div>
 
                 <div>
-                  <h4 className="font-semibold text-white mb-2">Description</h4>
-                  <p className="text-sm text-gray-400">{selectedProperty.description || "No description available."}</p>
+                  <h4 className="font-semibold text-foreground mb-2">Description</h4>
+                  <p className="text-sm text-muted-foreground">{selectedProperty.description || "No description available."}</p>
                 </div>
 
                 <div>
-                  <h4 className="font-semibold text-white mb-2">Listed By</h4>
-                  <p className="text-sm text-gray-400">{selectedProperty.agents?.[0]?.subagent?.name || "Verified Agent"}</p>
-                  <p className="text-xs text-gray-500">{new Date(selectedProperty.createdAt).toLocaleDateString()}</p>
+                  <h4 className="font-semibold text-foreground mb-2">Listed By</h4>
+                  <p className="text-sm text-muted-foreground">{selectedProperty.agents?.[0]?.subagent?.name || "Verified Agent"}</p>
+                  <p className="text-xs text-muted-foreground/70">{new Date(selectedProperty.createdAt).toLocaleDateString()}</p>
                 </div>
 
                 {selectedProperty.status === "PENDING_APPROVAL" && (
@@ -283,7 +283,7 @@ export function PropertyModeration() {
                     </Button>
                     <Button
                       variant="outline"
-                      className="w-full text-red-400 border-red-400 hover:bg-red-400/10"
+                      className="w-full text-red-500 dark:text-red-400 border-red-400/50 hover:bg-red-500/10"
                       onClick={() => handleReject(selectedProperty.id)}
                     >
                       <X className="size-4 mr-2" />
@@ -294,8 +294,8 @@ export function PropertyModeration() {
               </div>
             ) : (
               <div className="text-center py-12">
-                <Eye className="size-12 text-gray-600 mx-auto mb-3" />
-                <p className="text-gray-400">Select a property to view details</p>
+                <Eye className="size-12 text-muted-foreground/40 mx-auto mb-3" />
+                <p className="text-muted-foreground">Select a property to view details</p>
               </div>
             )}
           </div>

@@ -82,7 +82,7 @@ export function ChatMonitoring() {
       alert(`Flag resolved for conversation: ${id}`);
       setSessions(prev => prev.map(s => s.id === id ? { ...s, status: "active", flagged: false, flagReason: null } : s));
       if (selectedConversation && selectedConversation.id === id) {
-        setSelectedConversation(prev => prev ? { ...prev, status: "active", flagged: false, flagReason: null } : null);
+        setSelectedConversation((prev: any) => prev ? { ...prev, status: "active", flagged: false, flagReason: null } : null);
       }
     } catch (e) {
       console.error(e);
@@ -98,61 +98,61 @@ export function ChatMonitoring() {
   const flaggedCount = sessions.filter((c) => c.flagged).length;
 
   return (
-    <div className="p-8 bg-gray-900 min-h-screen text-white">
+    <div className="p-8 bg-background min-h-screen text-foreground">
       <div className="max-w-7xl mx-auto space-y-6">
         {/* Header */}
         <div>
           <h1 className="text-3xl font-bold">Chat Monitoring</h1>
-          <p className="text-gray-400 mt-1">Monitor customer-agent conversations and ensure platform compliance</p>
+          <p className="text-muted-foreground mt-1">Monitor customer-agent conversations and ensure platform compliance</p>
         </div>
 
         {/* Stats */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-          <div className="bg-gray-800 rounded-xl border border-gray-700 p-6">
+          <div className="glass rounded-2xl shadow-soft p-6 hover:shadow-elevated transition-shadow">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-400">Total Conversations</p>
-                <p className="text-3xl font-semibold text-white mt-2 font-numeric">{sessions.length}</p>
+                <p className="text-sm text-muted-foreground">Total Conversations</p>
+                <p className="text-3xl font-semibold text-foreground mt-2 font-numeric">{sessions.length}</p>
               </div>
-              <MessageSquare className="size-8 text-blue-400" />
+              <MessageSquare className="size-8 text-blue-500 dark:text-blue-400" />
             </div>
           </div>
-          <div className="bg-gray-800 rounded-xl border border-gray-700 p-6">
+          <div className="glass rounded-2xl shadow-soft p-6 hover:shadow-elevated transition-shadow">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-400">Active Chats</p>
-                <p className="text-3xl font-semibold text-white mt-2 font-numeric">{activeCount}</p>
+                <p className="text-sm text-muted-foreground">Active Chats</p>
+                <p className="text-3xl font-semibold text-foreground mt-2 font-numeric">{activeCount}</p>
               </div>
-              <Eye className="size-8 text-green-400" />
+              <Eye className="size-8 text-emerald-500 dark:text-emerald-400" />
             </div>
           </div>
-          <div className="bg-gray-800 rounded-xl border border-gray-700 p-6">
+          <div className="glass rounded-2xl shadow-soft p-6 hover:shadow-elevated transition-shadow">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-400">Flagged</p>
-                <p className="text-3xl font-semibold text-white mt-2 font-numeric">{flaggedCount}</p>
+                <p className="text-sm text-muted-foreground">Flagged</p>
+                <p className="text-3xl font-semibold text-foreground mt-2 font-numeric">{flaggedCount}</p>
               </div>
-              <Flag className="size-8 text-red-400" />
+              <Flag className="size-8 text-red-500 dark:text-red-400" />
             </div>
           </div>
-          <div className="bg-gray-800 rounded-xl border border-gray-700 p-6">
+          <div className="glass rounded-2xl shadow-soft p-6 hover:shadow-elevated transition-shadow">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-400">Total Messages</p>
-                <p className="text-3xl font-semibold text-white mt-2 font-numeric">{totalMessages}</p>
+                <p className="text-sm text-muted-foreground">Total Messages</p>
+                <p className="text-3xl font-semibold text-foreground mt-2 font-numeric">{totalMessages}</p>
               </div>
-              <MessageSquare className="size-8 text-purple-400" />
+              <MessageSquare className="size-8 text-purple-500 dark:text-purple-400" />
             </div>
           </div>
         </div>
 
         {/* Info Banner */}
-        <div className="bg-blue-500/10 border border-blue-500/30 rounded-xl p-4">
+        <div className="bg-primary/10 border border-primary/30 rounded-xl p-4">
           <div className="flex items-start space-x-3">
-            <Shield className="size-6 text-blue-400 flex-shrink-0 mt-0.5" />
+            <Shield className="size-6 text-primary flex-shrink-0 mt-0.5" />
             <div>
-              <h3 className="font-semibold text-white mb-1">Privacy Protection Active</h3>
-              <p className="text-sm text-blue-200">
+              <h3 className="font-semibold text-foreground mb-1">Privacy Protection Active</h3>
+              <p className="text-sm text-muted-foreground">
                 All conversations are monitored. The platform logs compliance markers and alerts admins if contact details are shared prior to unlocking.
               </p>
             </div>
@@ -171,8 +171,8 @@ export function ChatMonitoring() {
               onClick={() => setFilter(tab.key as typeof filter)}
               className={`px-4 py-2 rounded-lg font-medium transition-colors ${
                 filter === tab.key
-                  ? "bg-blue-600 text-white"
-                  : "bg-gray-800 text-gray-400 hover:bg-gray-700 border border-gray-700"
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-secondary text-muted-foreground hover:bg-secondary/80 border border-border"
               }`}
             >
               {tab.label}
@@ -185,29 +185,29 @@ export function ChatMonitoring() {
           <div className={`lg:col-span-2 space-y-3 ${selectedConversation ? "hidden lg:block" : "block"}`}>
             {loading ? (
               <div className="flex justify-center items-center py-20">
-                <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-500"></div>
+                <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary"></div>
               </div>
             ) : filteredConversations.length === 0 ? (
-              <div className="text-center py-20 bg-gray-800 border border-gray-700 rounded-xl">
-                <p className="text-gray-400">No conversations found.</p>
+              <div className="text-center py-20 glass rounded-2xl shadow-soft">
+                <p className="text-muted-foreground">No conversations found.</p>
               </div>
             ) : (
               filteredConversations.map((conversation) => (
                 <div
                   key={conversation.id}
-                  className={`bg-gray-800 rounded-xl border p-4 cursor-pointer transition-all ${
+                  className={`glass rounded-2xl shadow-soft p-4 cursor-pointer transition-all ${
                     selectedConversation?.id === conversation.id
-                      ? "border-blue-500 ring-2 ring-blue-500/50"
+                      ? "ring-2 ring-primary/50"
                       : conversation.flagged
-                        ? "border-red-500/50"
-                        : "border-gray-700 hover:border-gray-600"
+                        ? "ring-1 ring-red-500/30"
+                        : "hover:shadow-elevated"
                   }`}
                   onClick={() => setSelectedConversation(conversation)}
                 >
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex-1">
                       <div className="flex items-center space-x-2 mb-1">
-                        <h3 className="font-semibold text-white">{conversation.customer}</h3>
+                        <h3 className="font-semibold text-foreground">{conversation.customer}</h3>
                         {conversation.flagged && (
                           <Badge variant="danger" size="sm">
                             <Flag className="size-3 mr-1" />
@@ -215,23 +215,23 @@ export function ChatMonitoring() {
                           </Badge>
                         )}
                       </div>
-                      <p className="text-sm text-gray-400">
+                      <p className="text-sm text-muted-foreground">
                         with {conversation.agent} • {conversation.property}
                       </p>
                     </div>
-                    <MessageSquare className="size-5 text-gray-500" />
+                    <MessageSquare className="size-5 text-muted-foreground/50" />
                   </div>
 
                   {conversation.flagged && conversation.flagReason && (
-                    <div className="p-2 bg-red-500/10 border border-red-500/30 rounded-lg mb-3">
+                    <div className="p-2 bg-red-500/10 border border-red-500/20 rounded-lg mb-3">
                       <div className="flex items-center space-x-2">
-                        <AlertTriangle className="size-4 text-red-400" />
-                        <p className="text-xs text-red-400">{conversation.flagReason}</p>
+                        <AlertTriangle className="size-4 text-red-500 dark:text-red-400" />
+                        <p className="text-xs text-red-600 dark:text-red-400">{conversation.flagReason}</p>
                       </div>
                     </div>
                   )}
 
-                  <div className="flex items-center justify-between text-sm text-gray-400">
+                  <div className="flex items-center justify-between text-sm text-muted-foreground">
                     <span>{conversation.messageCount} messages</span>
                     <span>Last message {conversation.lastMessage}</span>
                   </div>
@@ -241,11 +241,11 @@ export function ChatMonitoring() {
           </div>
 
           {/* Conversation Details */}
-          <div className={`bg-gray-800 rounded-xl border border-gray-700 flex flex-col h-[600px] ${selectedConversation ? "block" : "hidden lg:flex"}`}>
+          <div className={`glass rounded-2xl shadow-soft flex flex-col h-[600px] ${selectedConversation ? "flex" : "hidden lg:flex"}`}>
             {selectedConversation ? (
               <>
                 {/* Header */}
-                <div className="p-4 border-b border-gray-700">
+                <div className="p-4 border-b border-border">
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center">
                       <button
@@ -254,7 +254,7 @@ export function ChatMonitoring() {
                       >
                         ← Back
                       </button>
-                      <h2 className="text-lg font-semibold text-white">Conversation Details</h2>
+                      <h2 className="text-lg font-semibold text-foreground">Conversation Details</h2>
                     </div>
                     {selectedConversation.flagged && (
                       <Badge variant="danger">
@@ -263,10 +263,10 @@ export function ChatMonitoring() {
                       </Badge>
                     )}
                   </div>
-                  <p className="text-sm text-gray-400">
+                  <p className="text-sm text-muted-foreground">
                     {selectedConversation.customer} ↔ {selectedConversation.agent}
                   </p>
-                  <p className="text-xs text-gray-500">{selectedConversation.property}</p>
+                  <p className="text-xs text-muted-foreground/70">{selectedConversation.property}</p>
                 </div>
 
                 {/* Messages */}
@@ -280,17 +280,17 @@ export function ChatMonitoring() {
                         className={`flex ${isCustomerMsg ? "justify-end" : "justify-start"}`}
                       >
                         <div className="max-w-[80%]">
-                          <p className="text-xs text-gray-400 mb-1 px-1">{senderName}</p>
+                          <p className="text-xs text-muted-foreground mb-1 px-1">{senderName}</p>
                           <div
                             className={`rounded-xl px-3 py-2 ${
                               isCustomerMsg
-                                ? "bg-blue-600 text-white"
-                                : "bg-gray-700 text-white"
+                                ? "bg-primary text-primary-foreground"
+                                : "bg-secondary text-foreground"
                             }`}
                           >
                             <p className="text-sm">{message.content}</p>
                           </div>
-                          <p className="text-xs text-gray-500 mt-1 px-1">
+                          <p className="text-xs text-muted-foreground/70 mt-1 px-1">
                             {new Date(message.createdAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
                           </p>
                         </div>
@@ -298,12 +298,12 @@ export function ChatMonitoring() {
                     );
                   })}
                   {selectedConversation.messages.length === 0 && (
-                    <p className="text-gray-500 text-center py-6">No messages recorded.</p>
+                    <p className="text-muted-foreground text-center py-6">No messages recorded.</p>
                   )}
                 </div>
 
                 {/* Actions */}
-                <div className="p-4 border-t border-gray-700 space-y-2">
+                <div className="p-4 border-t border-border space-y-2">
                   {selectedConversation.flagged ? (
                     <>
                       <Button
@@ -316,7 +316,7 @@ export function ChatMonitoring() {
                       </Button>
                       <Button
                         variant="outline"
-                        className="w-full text-red-400 border-red-400 hover:bg-red-400/10"
+                        className="w-full text-red-500 dark:text-red-400 border-red-400/50 hover:bg-red-500/10"
                         size="sm"
                         onClick={() => handleTakeAction(selectedConversation.id)}
                       >
@@ -326,7 +326,7 @@ export function ChatMonitoring() {
                   ) : (
                     <Button
                       variant="outline"
-                      className="w-full text-red-400 border-red-400 hover:bg-red-400/10"
+                      className="w-full text-red-500 dark:text-red-400 border-red-400/50 hover:bg-red-500/10"
                       size="sm"
                       onClick={() => handleTakeAction(selectedConversation.id)}
                     >
@@ -338,8 +338,8 @@ export function ChatMonitoring() {
             ) : (
               <div className="flex-1 flex items-center justify-center">
                 <div className="text-center">
-                  <MessageSquare className="size-12 text-gray-600 mx-auto mb-3" />
-                  <p className="text-gray-400">Select a conversation to view messages</p>
+                  <MessageSquare className="size-12 text-muted-foreground/40 mx-auto mb-3" />
+                  <p className="text-muted-foreground">Select a conversation to view messages</p>
                 </div>
               </div>
             )}
