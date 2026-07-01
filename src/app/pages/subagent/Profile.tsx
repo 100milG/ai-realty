@@ -96,33 +96,33 @@ export function Profile() {
 
   if (loading) {
     return (
-      <div className="p-8 bg-gray-50 min-h-screen flex items-center justify-center">
+      <div className="p-8 bg-background min-h-screen flex items-center justify-center">
         <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary"></div>
       </div>
     );
   }
 
   return (
-    <div className="p-8 bg-gray-50 min-h-screen">
+    <div className="p-8 bg-background min-h-screen">
       <div className="max-w-3xl mx-auto space-y-6">
         {/* Header */}
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 flex items-center">
+          <h1 className="text-3xl font-bold text-foreground flex items-center">
             <User className="size-8 text-primary mr-3" />
             Profile Settings
           </h1>
-          <p className="text-gray-600 mt-1">Manage and update your personal and security details</p>
+          <p className="text-muted-foreground mt-1">Manage and update your personal and security details</p>
         </div>
 
         {/* Feedback Messages */}
         {successMsg && (
-          <div className="p-4 bg-green-50 border border-green-200 rounded-xl text-green-700 flex items-center gap-2">
+          <div className="p-4 bg-green-500/10 border border-green-500/20 rounded-xl text-green-600 flex items-center gap-2">
             <CheckCircle2 className="size-5 text-green-600 flex-shrink-0" />
             <span>{successMsg}</span>
           </div>
         )}
         {errorMsg && (
-          <div className="p-4 bg-red-50 border border-red-200 rounded-xl text-red-700">
+          <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-600">
             {errorMsg}
           </div>
         )}
@@ -130,49 +130,49 @@ export function Profile() {
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* General Information Card */}
           <Card>
-            <h2 className="text-xl font-semibold text-gray-900 mb-6 flex items-center">
+            <h2 className="text-xl font-semibold text-foreground mb-6 flex items-center">
               <Sparkles className="size-5 text-primary mr-2" />
               General Information
             </h2>
             <div className="grid md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
+                <label className="block text-sm font-medium text-foreground/80 mb-2">Full Name</label>
                 <div className="relative">
-                  <User className="absolute left-3 top-3.5 size-5 text-gray-400" />
+                  <User className="absolute left-3 top-3.5 size-5 text-muted-foreground" />
                   <input
                     type="text"
                     required
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-primary/20 text-sm"
+                    className="w-full pl-10 pr-4 py-3 border border-border rounded-xl bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20 text-sm"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+                <label className="block text-sm font-medium text-foreground/80 mb-2">Email Address</label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-3.5 size-5 text-gray-400" />
+                  <Mail className="absolute left-3 top-3.5 size-5 text-muted-foreground" />
                   <input
                     type="email"
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-primary/20 text-sm"
+                    className="w-full pl-10 pr-4 py-3 border border-border rounded-xl bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20 text-sm"
                   />
                 </div>
               </div>
 
               <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
+                <label className="block text-sm font-medium text-foreground/80 mb-2">Phone Number</label>
                 <div className="relative">
-                  <Phone className="absolute left-3 top-3.5 size-5 text-gray-400" />
+                  <Phone className="absolute left-3 top-3.5 size-5 text-muted-foreground" />
                   <input
                     type="tel"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
                     placeholder="+1 (555) 000-0000"
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-primary/20 text-sm"
+                    className="w-full pl-10 pr-4 py-3 border border-border rounded-xl bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20 text-sm"
                   />
                 </div>
               </div>
@@ -181,35 +181,35 @@ export function Profile() {
 
           {/* Change Password Card */}
           <Card>
-            <h2 className="text-xl font-semibold text-gray-900 mb-6 flex items-center">
+            <h2 className="text-xl font-semibold text-foreground mb-6 flex items-center">
               <Lock className="size-5 text-primary mr-2" />
               Security Settings
             </h2>
             <div className="grid md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">New Password</label>
+                <label className="block text-sm font-medium text-foreground/80 mb-2">New Password</label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-3.5 size-5 text-gray-400" />
+                  <Lock className="absolute left-3 top-3.5 size-5 text-muted-foreground" />
                   <input
                     type="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="Leave blank to keep current"
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-primary/20 text-sm"
+                    className="w-full pl-10 pr-4 py-3 border border-border rounded-xl bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20 text-sm"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Confirm New Password</label>
+                <label className="block text-sm font-medium text-foreground/80 mb-2">Confirm New Password</label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-3.5 size-5 text-gray-400" />
+                  <Lock className="absolute left-3 top-3.5 size-5 text-muted-foreground" />
                   <input
                     type="password"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     placeholder="Leave blank to keep current"
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-primary/20 text-sm"
+                    className="w-full pl-10 pr-4 py-3 border border-border rounded-xl bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20 text-sm"
                   />
                 </div>
               </div>
