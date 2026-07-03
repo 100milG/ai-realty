@@ -1,3 +1,4 @@
 {
-    "workbench.preferredDarkColorTheme": "Light Modern"
+    "workbench.preferredDarkColorTheme": "Light Modern",
+    "css.lint.unknownAtRules": "ignore"
 }

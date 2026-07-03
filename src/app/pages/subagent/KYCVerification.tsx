@@ -108,38 +108,38 @@ export function KYCVerification() {
 
   if (loading) {
     return (
-      <div className="p-8 bg-gray-50 min-h-screen flex items-center justify-center">
+      <div className="p-8 bg-background min-h-screen flex items-center justify-center">
         <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary"></div>
       </div>
     );
   }
 
   return (
-    <div className="p-8 bg-gray-50 min-h-screen">
+    <div className="p-8 bg-background min-h-screen">
       <div className="max-w-4xl mx-auto space-y-6">
         {/* Header */}
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">KYC Verification</h1>
-          <p className="text-gray-600 mt-1">Verify your identity by submitting tax and identification cards (PDF format only)</p>
+          <h1 className="text-3xl font-bold text-foreground">KYC Verification</h1>
+          <p className="text-muted-foreground mt-1">Verify your identity by submitting tax and identification cards (PDF format only)</p>
         </div>
 
         {/* Status Card */}
         <Card>
           <div className="flex items-start space-x-4">
             <div className={`size-12 rounded-lg flex items-center justify-center ${
-              verificationStatus === "approved" ? "bg-green-100" :
-              verificationStatus === "rejected" ? "bg-red-100" :
-              verificationStatus === "pending" ? "bg-yellow-100" :
-              "bg-gray-100"
+              verificationStatus === "approved" ? "bg-green-500/10" :
+              verificationStatus === "rejected" ? "bg-red-500/10" :
+              verificationStatus === "pending" ? "bg-yellow-500/10" :
+              "bg-secondary"
             }`}>
               {verificationStatus === "approved" && <CheckCircle2 className="size-7 text-green-600" />}
               {verificationStatus === "rejected" && <AlertCircle className="size-7 text-red-600" />}
               {verificationStatus === "pending" && <Clock className="size-7 text-yellow-600" />}
-              {verificationStatus === "unsubmitted" && <AlertCircle className="size-7 text-gray-600" />}
+              {verificationStatus === "unsubmitted" && <AlertCircle className="size-7 text-muted-foreground" />}
             </div>
             <div className="flex-1">
               <div className="flex items-center justify-between mb-2">
-                <h2 className="text-xl font-semibold text-gray-900">Verification Status</h2>
+                <h2 className="text-xl font-semibold text-foreground">Verification Status</h2>
                 <Badge
                   variant={
                     verificationStatus === "approved" ? "success" :
@@ -154,7 +154,7 @@ export function KYCVerification() {
                   {verificationStatus === "unsubmitted" && "Not Submitted"}
                 </Badge>
               </div>
-              <p className="text-gray-600">
+              <p className="text-muted-foreground">
                 {verificationStatus === "approved" && "Your account has been verified. You can now list properties."}
                 {verificationStatus === "rejected" && `Your verification was rejected. Feedback: "${feedback || "Please upload valid documents."}"`}
                 {verificationStatus === "pending" && "Your documents are under review. This usually takes 24-48 hours."}
@@ -166,7 +166,7 @@ export function KYCVerification() {
 
         {/* Progress Steps */}
         <Card>
-          <h2 className="text-xl font-semibold text-gray-900 mb-6">Verification Progress</h2>
+          <h2 className="text-xl font-semibold text-foreground mb-6">Verification Progress</h2>
           <div className="space-y-4">
             {[
               { step: "Personal Information", status: "completed" },
@@ -176,15 +176,15 @@ export function KYCVerification() {
             ].map((item, index) => (
               <div key={index} className="flex items-center space-x-4">
                 <div className={`size-8 rounded-full flex items-center justify-center font-semibold ${
-                  item.status === "completed" ? "bg-green-100 text-green-600" :
-                  item.status === "current" ? "bg-blue-100 text-primary" :
-                  "bg-gray-100 text-gray-400"
+                  item.status === "completed" ? "bg-green-500/10 text-green-600" :
+                  item.status === "current" ? "bg-primary/10 text-primary" :
+                  "bg-secondary text-muted-foreground"
                 }`}>
                   {item.status === "completed" ? <CheckCircle2 className="size-5" /> : index + 1}
                 </div>
                 <div className="flex-1">
                   <p className={`font-medium ${
-                    item.status === "pending" ? "text-gray-500" : "text-gray-900"
+                    item.status === "pending" ? "text-muted-foreground" : "text-foreground"
                   }`}>
                     {item.step}
                   </p>
@@ -205,12 +205,12 @@ export function KYCVerification() {
 
         {/* Document Upload */}
         <Card>
-          <h2 className="text-xl font-semibold text-gray-900 mb-6">Upload Documents</h2>
+          <h2 className="text-xl font-semibold text-foreground mb-6">Upload Documents</h2>
           <div className="space-y-6">
             
             {/* PAN Card Upload */}
             <div>
-              <label className="block font-medium text-gray-900 mb-2">
+              <label className="block font-medium text-foreground mb-2">
                 PAN Card (PDF Format) *
               </label>
               <input
@@ -221,25 +221,25 @@ export function KYCVerification() {
                 onChange={(e) => handleFileChange(e, "panCard")}
               />
               {documents.panCard ? (
-                <div className="flex items-center justify-between p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                <div className="flex items-center justify-between p-4 bg-primary/5 border border-primary/20 rounded-lg">
                   <div className="flex items-center space-x-3 min-w-0">
                     <FileText className="size-8 text-primary flex-shrink-0" />
                     <div className="min-w-0">
-                      <p className="text-sm font-semibold text-gray-900 truncate">{documents.panCard.name}</p>
-                      <p className="text-xs text-gray-600">PDF Document</p>
+                      <p className="text-sm font-semibold text-foreground truncate">{documents.panCard.name}</p>
+                      <p className="text-xs text-muted-foreground">PDF Document</p>
                     </div>
                   </div>
                   <div className="flex items-center space-x-2">
                     <button
                       onClick={() => window.open(documents.panCard?.url, "_blank")}
-                      className="p-2 text-gray-500 hover:text-primary"
+                      className="p-2 text-muted-foreground hover:text-primary cursor-pointer"
                       title="View PDF"
                     >
                       <ExternalLink className="size-5" />
                     </button>
                     <button
                       onClick={() => setDocuments({ ...documents, panCard: null })}
-                      className="p-2 text-gray-500 hover:text-red-500"
+                      className="p-2 text-muted-foreground hover:text-red-500 cursor-pointer"
                       title="Remove PDF"
                     >
                       <X className="size-5" />
@@ -249,18 +249,18 @@ export function KYCVerification() {
               ) : (
                 <button
                   onClick={() => panInputRef.current?.click()}
-                  className="w-full h-32 border-2 border-dashed border-gray-300 rounded-lg hover:border-primary hover:bg-blue-50 transition-colors flex flex-col items-center justify-center"
+                  className="w-full h-32 border-2 border-dashed border-border rounded-lg hover:border-primary hover:bg-primary/5 transition-colors flex flex-col items-center justify-center cursor-pointer"
                 >
-                  <Upload className="size-8 text-gray-400 mb-2" />
-                  <span className="text-sm text-gray-600 font-medium">Upload PAN Card PDF</span>
-                  <span className="text-xs text-gray-500 mt-1">Accepts only PDF format</span>
+                  <Upload className="size-8 text-muted-foreground mb-2" />
+                  <span className="text-sm text-muted-foreground font-medium">Upload PAN Card PDF</span>
+                  <span className="text-xs text-muted-foreground mt-1">Accepts only PDF format</span>
                 </button>
               )}
             </div>
 
             {/* Aadhaar Card Upload */}
             <div>
-              <label className="block font-medium text-gray-900 mb-2">
+              <label className="block font-medium text-foreground mb-2">
                 Aadhaar Card (PDF Format) *
               </label>
               <input
@@ -271,25 +271,25 @@ export function KYCVerification() {
                 onChange={(e) => handleFileChange(e, "aadhaarCard")}
               />
               {documents.aadhaarCard ? (
-                <div className="flex items-center justify-between p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                <div className="flex items-center justify-between p-4 bg-primary/5 border border-primary/20 rounded-lg">
                   <div className="flex items-center space-x-3 min-w-0">
                     <FileText className="size-8 text-primary flex-shrink-0" />
                     <div className="min-w-0">
-                      <p className="text-sm font-semibold text-gray-900 truncate">{documents.aadhaarCard.name}</p>
-                      <p className="text-xs text-gray-600">PDF Document</p>
+                      <p className="text-sm font-semibold text-foreground truncate">{documents.aadhaarCard.name}</p>
+                      <p className="text-xs text-muted-foreground">PDF Document</p>
                     </div>
                   </div>
                   <div className="flex items-center space-x-2">
                     <button
                       onClick={() => window.open(documents.aadhaarCard?.url, "_blank")}
-                      className="p-2 text-gray-500 hover:text-primary"
+                      className="p-2 text-muted-foreground hover:text-primary cursor-pointer"
                       title="View PDF"
                     >
                       <ExternalLink className="size-5" />
                     </button>
                     <button
                       onClick={() => setDocuments({ ...documents, aadhaarCard: null })}
-                      className="p-2 text-gray-500 hover:text-red-500"
+                      className="p-2 text-muted-foreground hover:text-red-500 cursor-pointer"
                       title="Remove PDF"
                     >
                       <X className="size-5" />
@@ -299,11 +299,11 @@ export function KYCVerification() {
               ) : (
                 <button
                   onClick={() => aadhaarInputRef.current?.click()}
-                  className="w-full h-32 border-2 border-dashed border-gray-300 rounded-lg hover:border-primary hover:bg-blue-50 transition-colors flex flex-col items-center justify-center"
+                  className="w-full h-32 border-2 border-dashed border-border rounded-lg hover:border-primary hover:bg-primary/5 transition-colors flex flex-col items-center justify-center cursor-pointer"
                 >
-                  <Upload className="size-8 text-gray-400 mb-2" />
-                  <span className="text-sm text-gray-600 font-medium">Upload Aadhaar Card PDF</span>
-                  <span className="text-xs text-gray-500 mt-1">Accepts only PDF format</span>
+                  <Upload className="size-8 text-muted-foreground mb-2" />
+                  <span className="text-sm text-muted-foreground font-medium">Upload Aadhaar Card PDF</span>
+                  <span className="text-xs text-muted-foreground mt-1">Accepts only PDF format</span>
                 </button>
               )}
             </div>
@@ -313,7 +313,7 @@ export function KYCVerification() {
 
         {/* Submit Button */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
-          <p className="text-sm text-gray-600">
+          <p className="text-sm text-muted-foreground">
             All documents will be reviewed by our admin team
           </p>
           <Button

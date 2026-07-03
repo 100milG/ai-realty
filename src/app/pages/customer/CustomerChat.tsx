@@ -154,7 +154,7 @@ export function CustomerChat() {
 
   if (loading) {
     return (
-      <div className="flex h-full min-h-screen bg-gray-50 items-center justify-center">
+      <div className="flex h-full min-h-screen bg-background items-center justify-center">
         <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary"></div>
       </div>
     );
@@ -162,8 +162,8 @@ export function CustomerChat() {
 
   if (leadId && (!session || !lead)) {
     return (
-      <div className="flex flex-col h-full min-h-screen bg-gray-50 items-center justify-center">
-        <p className="text-gray-500 mb-4">Chat conversation not found.</p>
+      <div className="flex flex-col h-full min-h-screen bg-background items-center justify-center">
+        <p className="text-muted-foreground mb-4">Chat conversation not found.</p>
         <Button onClick={() => navigate(-1)}>Go Back</Button>
       </div>
     );
@@ -191,7 +191,7 @@ export function CustomerChat() {
   const propertyLocation = property?.address || (property?.locality ? `${property.locality.name}, ${property.locality.city}` : "Unknown Locality");
 
   return (
-    <div className="flex h-full bg-gray-50 overflow-hidden w-full relative min-h-screen">
+    <div className="flex h-full bg-background overflow-hidden w-full relative min-h-screen">
       {/* Sidebar Backdrop for Mobile */}
       {showSidebar && (
         <div
@@ -201,10 +201,10 @@ export function CustomerChat() {
       )}
 
       {/* Chat List Sidebar (Left pane) */}
-      <aside className="w-80 bg-white border-r border-gray-200 flex flex-col flex-shrink-0 h-screen hidden md:flex">
-        <div className="p-4 border-b border-gray-200">
-          <h3 className="font-semibold text-gray-900 text-lg">Active Chats</h3>
-          <p className="text-xs text-gray-500 mt-1">Talk with agents/clients about active properties</p>
+      <aside className="w-80 bg-card border-r border-border flex flex-col flex-shrink-0 h-screen hidden md:flex">
+        <div className="p-4 border-b border-border">
+          <h3 className="font-semibold text-foreground text-lg">Active Chats</h3>
+          <p className="text-xs text-muted-foreground mt-1">Talk with agents/clients about active properties</p>
         </div>
         <div className="flex-1 overflow-y-auto p-2 space-y-1">
           {leads.map((l) => {
@@ -222,8 +222,8 @@ export function CustomerChat() {
                 <div
                   className={`flex items-center space-x-3 p-3 rounded-xl transition-all cursor-pointer ${
                     isActive
-                      ? "bg-blue-50 border-l-4 border-primary"
-                      : "hover:bg-gray-50"
+                      ? "bg-primary/10 border-l-4 border-primary"
+                      : "hover:bg-secondary/50"
                   }`}
                 >
                   <img
@@ -232,10 +232,10 @@ export function CustomerChat() {
                     className="size-10 rounded-lg object-cover flex-shrink-0"
                   />
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-semibold text-gray-900 truncate">
+                    <p className="text-sm font-semibold text-foreground truncate">
                       {prop?.title || "Property"}
                     </p>
-                    <p className="text-xs text-gray-600 truncate">{partnerName}</p>
+                    <p className="text-xs text-muted-foreground truncate">{partnerName}</p>
                   </div>
                   <Badge variant={l.status === "NEW" ? "info" : "default"} size="sm">
                     {l.status}
@@ -246,7 +246,7 @@ export function CustomerChat() {
           })}
           {leads.length === 0 && (
             <div className="text-center py-8">
-              <p className="text-sm text-gray-500">No active chats.</p>
+              <p className="text-sm text-muted-foreground">No active chats.</p>
             </div>
           )}
         </div>
@@ -254,13 +254,13 @@ export function CustomerChat() {
 
       {!lead ? (
         /* Placeholder Chat Area */
-        <div className="flex-1 flex flex-col h-screen overflow-hidden justify-center items-center bg-gray-50 p-8">
+        <div className="flex-1 flex flex-col h-screen overflow-hidden justify-center items-center bg-background p-8">
           <div className="text-center max-w-sm space-y-4">
-            <div className="size-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <div className="size-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
               <MessageSquare className="size-8 text-primary" />
             </div>
-            <h3 className="text-xl font-semibold text-gray-900">Your Messages</h3>
-            <p className="text-sm text-gray-600">
+            <h3 className="text-xl font-semibold text-foreground">Your Messages</h3>
+            <p className="text-sm text-muted-foreground">
               Select a conversation from the sidebar list to start chatting with verified agents or clients about listed properties.
             </p>
           </div>
@@ -269,16 +269,16 @@ export function CustomerChat() {
         /* Chat Area */
         <div className="flex-1 flex flex-col h-screen overflow-hidden">
           {/* Header */}
-          <div className="bg-white border-b border-gray-200 p-4">
+          <div className="bg-card border-b border-border p-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
                 <div className="size-10 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white font-semibold">
                   {chatPartnerInitials}
                 </div>
                 <div>
-                  <h2 className="font-semibold text-gray-900">{chatPartnerName}</h2>
+                  <h2 className="font-semibold text-foreground">{chatPartnerName}</h2>
                   <div className="flex items-center space-x-2">
-                    <p className="text-sm text-gray-600">{chatPartnerRole}</p>
+                    <p className="text-sm text-muted-foreground">{chatPartnerRole}</p>
                     <Badge variant="success" size="sm">
                       Active
                     </Badge>
@@ -286,13 +286,13 @@ export function CustomerChat() {
                 </div>
               </div>
               <div className="flex items-center space-x-2">
-                <div className="hidden sm:flex items-center space-x-2 text-sm text-gray-600">
+                <div className="hidden sm:flex items-center space-x-2 text-sm text-muted-foreground">
                   <Shield className="size-4 text-accent" />
                   <span>Platform Monitored</span>
                 </div>
                 <button
                   onClick={() => setShowSidebar(!showSidebar)}
-                  className="lg:hidden p-2 rounded-lg text-gray-500 hover:bg-gray-100 focus:outline-none"
+                  className="lg:hidden p-2 rounded-lg text-muted-foreground hover:bg-secondary focus:outline-none"
                   title="View Property Details"
                 >
                   <Info className="size-5" />
@@ -304,12 +304,12 @@ export function CustomerChat() {
           {/* Messages */}
           <div className="flex-1 overflow-y-auto p-6 space-y-4">
             {/* Privacy Notice */}
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+            <div className="bg-primary/10 border border-primary/20 rounded-lg p-4 mb-6">
               <div className="flex items-start space-x-2">
                 <Shield className="size-5 text-primary flex-shrink-0 mt-0.5" />
                 <div>
-                  <p className="text-sm font-medium text-gray-900">Secure Conversation</p>
-                  <p className="text-xs text-gray-600 mt-1">
+                  <p className="text-sm font-medium text-foreground">Secure Conversation</p>
+                  <p className="text-xs text-muted-foreground mt-1">
                     Your contact details are protected. Messages are logged to maintain quality and safety.
                     {!lead.isUnlocked && !isCustomer && " Unlock contact details to view the customer's phone/email."}
                     {!lead.isUnlocked && isCustomer && " The agent cannot see your contact info until unlocked."}
@@ -329,21 +329,21 @@ export function CustomerChat() {
                   <div className={`max-w-md ${isMe ? "ml-12" : "mr-12"}`}>
                     {!isMe && (
                       <div className="flex items-center space-x-2 mb-1">
-                        <span className="text-xs text-gray-600">{msgSenderName}</span>
+                        <span className="text-xs text-muted-foreground">{msgSenderName}</span>
                       </div>
                     )}
                     <div
                       className={`rounded-2xl px-4 py-3 ${
                         isMe
                           ? "bg-primary text-white"
-                          : "bg-white border border-gray-200"
+                          : "bg-card border border-border"
                       }`}
                     >
-                      <p className={isMe ? "text-white" : "text-gray-700 whitespace-pre-wrap"}>
+                      <p className={isMe ? "text-white" : "text-foreground whitespace-pre-wrap"}>
                         {message.content}
                       </p>
                     </div>
-                    <p className="text-xs text-gray-500 mt-1 px-1">
+                    <p className="text-xs text-muted-foreground mt-1 px-1">
                       {new Date(message.createdAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
                     </p>
                   </div>
@@ -354,7 +354,7 @@ export function CustomerChat() {
           </div>
 
           {/* Input */}
-          <div className="bg-white border-t border-gray-200 p-4">
+          <div className="bg-card border-t border-border p-4">
             <div className="flex items-center space-x-3">
               <input
                 type="text"
@@ -362,7 +362,7 @@ export function CustomerChat() {
                 onChange={(e) => setInput(e.target.value)}
                 onKeyPress={(e) => e.key === "Enter" && handleSend()}
                 placeholder="Type your message..."
-                className="flex-1 px-4 py-3 bg-gray-100 rounded-xl outline-none"
+                className="flex-1 px-4 py-3 bg-secondary rounded-xl outline-none text-foreground"
               />
               <Button onClick={handleSend} size="lg">
                 <Send className="size-5" />
@@ -375,15 +375,15 @@ export function CustomerChat() {
       {/* Property Sidebar */}
       {lead && property && (
         <aside
-          className={`fixed inset-y-0 right-0 z-50 w-80 bg-white border-l border-gray-200 p-6 overflow-y-auto transform transition-transform duration-300 ease-in-out
+          className={`fixed inset-y-0 right-0 z-50 w-80 bg-card border-l border-border p-6 overflow-y-auto transform transition-transform duration-300 ease-in-out
             lg:relative lg:inset-auto lg:z-auto lg:transform-none lg:block h-screen
             ${showSidebar ? "translate-x-0" : "translate-x-full lg:translate-x-0"}`}
         >
           <div className="flex items-center justify-between lg:hidden mb-4">
-            <h3 className="font-semibold text-gray-900">Property Details</h3>
+            <h3 className="font-semibold text-foreground">Property Details</h3>
             <button
               onClick={() => setShowSidebar(false)}
-              className="p-1 rounded-lg text-gray-500 hover:bg-gray-100"
+              className="p-1 rounded-lg text-muted-foreground hover:bg-secondary"
             >
               <X className="size-5" />
             </button>
@@ -397,13 +397,13 @@ export function CustomerChat() {
                 className="w-full h-40 object-cover rounded-t-xl"
               />
               <div className="p-4">
-                <p className="text-xl font-semibold text-gray-900">{propertyPrice}</p>
-                <h4 className="font-medium text-gray-900 mt-2">{property.title}</h4>
-                <div className="flex items-center text-sm text-gray-600 mt-1">
+                <p className="text-xl font-semibold text-foreground">{propertyPrice}</p>
+                <h4 className="font-medium text-foreground mt-2">{property.title}</h4>
+                <div className="flex items-center text-sm text-muted-foreground mt-1">
                   <MapPin className="size-4 mr-1" />
                   {propertyLocation}
                 </div>
-                <div className="flex items-center space-x-3 text-sm text-gray-600 mt-3 pt-3 border-t border-gray-100">
+                <div className="flex items-center space-x-3 text-sm text-muted-foreground mt-3 pt-3 border-t border-border">
                   <span className="flex items-center">
                     <Bed className="size-4 mr-1" />
                     {property.beds || 0}
@@ -422,7 +422,7 @@ export function CustomerChat() {
           </Link>
 
           <div className="mt-6">
-            <h3 className="font-semibold text-gray-900 mb-3">Quick Actions</h3>
+            <h3 className="font-semibold text-foreground mb-3">Quick Actions</h3>
             <div className="space-y-2">
               <Button variant="outline" className="w-full justify-start">
                 Schedule Viewing
@@ -436,10 +436,10 @@ export function CustomerChat() {
             </div>
           </div>
 
-          <div className="mt-6 p-4 bg-green-50 rounded-lg">
-            <h4 className="font-medium text-gray-900 mb-2">Lead Status</h4>
+          <div className="mt-6 p-4 bg-green-500/10 rounded-lg">
+            <h4 className="font-medium text-foreground mb-2">Lead Status</h4>
             <Badge variant="success" size="sm">{lead.status}</Badge>
-            <p className="text-xs text-gray-600 mt-2">
+            <p className="text-xs text-muted-foreground mt-2">
               This lead status determines current follow-up progress. It is synchronized live on both agent and customer dashboards.
             </p>
           </div>

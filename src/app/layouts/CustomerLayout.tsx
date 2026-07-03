@@ -127,30 +127,36 @@ export function CustomerLayout() {
                         <p className="text-sm font-semibold text-foreground">{currentUser.name}</p>
                         <p className="text-xs text-muted-foreground truncate">{currentUser.email}</p>
                       </div>
-                      <Link
-                        to="/customer/dashboard"
-                        onClick={() => setPortalDropdownOpen(false)}
-                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors"
-                      >
-                        <User className="size-4" />
-                        <span>Customer Portal</span>
-                      </Link>
-                      <Link
-                        to="/subagent/dashboard"
-                        onClick={() => setPortalDropdownOpen(false)}
-                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors"
-                      >
-                        <Building2 className="size-4" />
-                        <span>Subagent Portal</span>
-                      </Link>
-                      <Link
-                        to="/admin/dashboard"
-                        onClick={() => setPortalDropdownOpen(false)}
-                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors"
-                      >
-                        <Shield className="size-4" />
-                        <span>Admin Portal</span>
-                      </Link>
+                      {currentUser.role === "CUSTOMER" && (
+                        <Link
+                          to="/customer/dashboard"
+                          onClick={() => setPortalDropdownOpen(false)}
+                          className="flex items-center gap-3 px-4 py-2.5 text-sm text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors"
+                        >
+                          <User className="size-4" />
+                          <span>Customer Portal</span>
+                        </Link>
+                      )}
+                      {currentUser.role === "SUBAGENT" && (
+                        <Link
+                          to="/subagent/dashboard"
+                          onClick={() => setPortalDropdownOpen(false)}
+                          className="flex items-center gap-3 px-4 py-2.5 text-sm text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors"
+                        >
+                          <Building2 className="size-4" />
+                          <span>Subagent Portal</span>
+                        </Link>
+                      )}
+                      {currentUser.role === "ADMIN" && (
+                        <Link
+                          to="/admin/dashboard"
+                          onClick={() => setPortalDropdownOpen(false)}
+                          className="flex items-center gap-3 px-4 py-2.5 text-sm text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors"
+                        >
+                          <Shield className="size-4" />
+                          <span>Admin Portal</span>
+                        </Link>
+                      )}
                       <div className="border-t border-border mt-1 pt-1">
                         <button
                           onClick={handleLogout}
@@ -208,14 +214,36 @@ export function CustomerLayout() {
                 <p className="px-3 py-1.5 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                   {currentUser.name}
                 </p>
-                <Link
-                  to="/customer/dashboard"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center gap-2 px-3 py-2.5 rounded-lg text-muted-foreground hover:bg-secondary"
-                >
-                  <User className="size-5" />
-                  <span>Customer Portal</span>
-                </Link>
+                {currentUser.role === "CUSTOMER" && (
+                  <Link
+                    to="/customer/dashboard"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center gap-2 px-3 py-2.5 rounded-lg text-muted-foreground hover:bg-secondary"
+                  >
+                    <User className="size-5" />
+                    <span>Customer Portal</span>
+                  </Link>
+                )}
+                {currentUser.role === "SUBAGENT" && (
+                  <Link
+                    to="/subagent/dashboard"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center gap-2 px-3 py-2.5 rounded-lg text-muted-foreground hover:bg-secondary"
+                  >
+                    <Building2 className="size-5" />
+                    <span>Subagent Portal</span>
+                  </Link>
+                )}
+                {currentUser.role === "ADMIN" && (
+                  <Link
+                    to="/admin/dashboard"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center gap-2 px-3 py-2.5 rounded-lg text-muted-foreground hover:bg-secondary"
+                  >
+                    <Shield className="size-5" />
+                    <span>Admin Portal</span>
+                  </Link>
+                )}
                 <button
                   onClick={() => {
                     handleLogout();

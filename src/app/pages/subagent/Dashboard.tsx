@@ -40,16 +40,22 @@ export function SubagentDashboard() {
   };
 
   const token = localStorage.getItem("token");
-  let subagentName = "Raj Patel";
-  let currentUserId = "";
-  if (token) {
+  const userJson = localStorage.getItem("user");
+  const currentUser = userJson ? JSON.parse(userJson) : null;
+  let subagentName = currentUser?.name || "";
+  let currentUserId = currentUser?.id || "";
+
+  if (!subagentName && token) {
     try {
       const payload = JSON.parse(atob(token.split(".")[1]));
-      subagentName = payload.name || "Raj Patel";
+      subagentName = payload.name || "";
       currentUserId = payload.id;
     } catch (e) {
       console.error(e);
     }
+  }
+  if (!subagentName) {
+    subagentName = "Subagent";
   }
 
   useEffect(() => {

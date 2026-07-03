@@ -142,7 +142,7 @@ export function PropertyModeration() {
                 const formattedPrice = property.price ? `₹${property.price.toLocaleString()}` : "Contact Agent";
                 const propertyLocation = property.address || (property.locality ? `${property.locality.name}, ${property.locality.city}` : "Unknown Locality");
                 const agentRelation = property.agents?.[0];
-                const agentName = agentRelation?.subagent?.name || "Raj Patel";
+                const agentName = agentRelation?.subagent?.name || "AI Realty Agent";
                 const formattedTime = new Date(property.createdAt).toLocaleDateString();
 
                 return (
