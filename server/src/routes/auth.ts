@@ -36,7 +36,6 @@ router.post("/register", async (req: Request, res: Response) => {
     // 3. Determine and map the user role (defaulting to CUSTOMER)
     let userRole: Role = Role.CUSTOMER;
     if (role === "SUBAGENT") userRole = Role.SUBAGENT;
-    if (role === "ADMIN") userRole = Role.ADMIN;
 
     // 4. Create the new user in our database
     const newUser = await prisma.user.create({
@@ -52,7 +51,7 @@ router.post("/register", async (req: Request, res: Response) => {
 
     // 5. Generate a JSON Web Token (JWT) so they are logged in immediately
     const token = jwt.sign(
-      { id: newUser.id, email: newUser.email, role: newUser.role },
+      { id: newUser.id, email: newUser.email, role: newUser.role, name: newUser.name },
       JWT_SECRET,
       { expiresIn: "7d" } // Token expires in 7 days
     );
@@ -104,7 +103,7 @@ router.post("/login", async (req: Request, res: Response) => {
 
     // 3. Generate a JWT session token
     const token = jwt.sign(
-      { id: user.id, email: user.email, role: user.role },
+      { id: user.id, email: user.email, role: user.role, name: user.name },
       JWT_SECRET,
       { expiresIn: "7d" }
     );
@@ -186,7 +185,7 @@ router.put("/profile", authenticateToken, async (req: AuthRequest, res: Response
 
     // 4. Sign refreshed token
     const token = jwt.sign(
-      { id: updatedUser.id, email: updatedUser.email, role: updatedUser.role },
+      { id: updatedUser.id, email: updatedUser.email, role: updatedUser.role, name: updatedUser.name },
       JWT_SECRET,
       { expiresIn: "7d" }
     );

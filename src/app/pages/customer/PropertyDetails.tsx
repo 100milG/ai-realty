@@ -236,7 +236,7 @@ export function PropertyDetails() {
 
   const primaryAgentRelation = property.agents?.find((a: any) => a.primaryAgent) || property.agents?.[0];
   const agent = primaryAgentRelation?.subagent;
-  const agentName = agent?.name || "Raj Patel";
+  const agentName = agent?.name || "AI Realty Agent";
   const agentInitials = agentName
     .split(" ")
     .map((n: string) => n[0])
