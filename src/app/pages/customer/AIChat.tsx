@@ -47,6 +47,29 @@ const suggestedQuestions = [
 
 const LOCAL_STORAGE_KEY = "ai_chat_sessions_v1";
 
+// Converts markdown-like AI output into clean readable HTML
+function renderMarkdown(text: string): string {
+  return text
+    // **bold**
+    .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+    // *italic* (single star, not part of a list)
+    .replace(/(?<!\d)\*(?!\*|\s*\d)(.+?)\*/g, "<em>$1</em>")
+    // Numbered list items: "1. foo" → "<li>foo</li>" wrapped in <ol>
+    .replace(/(?:^|\n)(\d+\.\s+.+?)(?=\n\d+\.\s|\n[^\d]|$)/gs, (_match, item) => {
+      const cleaned = item.replace(/^\d+\.\s+/, "").trim();
+      return `<li>${cleaned}</li>`;
+    })
+    .replace(/(<li>.*<\/li>)/s, "<ol class='list-decimal pl-5 space-y-2 my-2'>$1</ol>")
+    // Bullet list items: "- foo" or "• foo"
+    .replace(/(?:^|\n)[-•]\s+(.+)/g, "\n<li>$1</li>")
+    .replace(/((?:<li>.*<\/li>\n?)+)/s, (match) => {
+      if (match.includes("list-decimal")) return match;
+      return `<ul class='list-disc pl-5 space-y-1 my-2'>${match}</ul>`;
+    })
+    // Line breaks
+    .replace(/\n/g, "<br />");
+}
+
 function getStoredSessions(): ChatSessionState[] {
   try {
     const raw = localStorage.getItem(LOCAL_STORAGE_KEY);
@@ -372,9 +395,14 @@ export function AIChat() {
                       : "bg-card border border-border shadow-soft"
                   }`}
                 >
-                  <p className={message.role === "user" ? "text-primary-foreground" : "text-foreground"}>
-                    {message.content}
-                  </p>
+                  {message.role === "user" ? (
+                    <p className="text-primary-foreground">{message.content}</p>
+                  ) : (
+                    <div
+                      className="text-foreground text-sm leading-relaxed prose-sm"
+                      dangerouslySetInnerHTML={{ __html: renderMarkdown(message.content) }}
+                    />
+                  )}
                 </div>
 
                 {/* Property Cards in Chat */}
