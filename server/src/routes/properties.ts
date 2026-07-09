@@ -1,10 +1,61 @@
 import { Router, Response } from "express";
 import jwt from "jsonwebtoken";
+import multer from "multer";
+import path from "path";
+import fs from "fs";
 import { prisma } from "../db";
 import { authenticateToken, authorizeRoles, AuthRequest } from "../middlewares/auth";
 import { PropertyStatus, PropertyType, ListingType } from "@prisma/client";
 
 const router = Router();
+
+// Configure multer storage for property images
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    const dir = path.join(__dirname, "../../uploads");
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true });
+    }
+    cb(null, dir);
+  },
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    cb(null, file.fieldname + "-" + uniqueSuffix + path.extname(file.originalname));
+  }
+});
+
+const upload = multer({
+  storage,
+  limits: { fileSize: 5 * 1024 * 1024 }, // limit 5MB
+  fileFilter: (req, file, cb) => {
+    const filetypes = /jpeg|jpg|png|webp/;
+    const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+    const mimetype = filetypes.test(file.mimetype);
+    if (mimetype && extname) {
+      return cb(null, true);
+    }
+    cb(new Error("Only images (.jpg, .jpeg, .png, .webp) are allowed!"));
+  }
+});
+
+/**
+ * POST /api/properties/upload
+ * Upload an image file (Restricted to SUBAGENT or ADMIN)
+ */
+router.post("/upload", authenticateToken, authorizeRoles("SUBAGENT", "ADMIN"), upload.single("file"), (req: AuthRequest, res: Response) => {
+  if (!req.file) {
+    return res.status(400).json({ error: "No file uploaded." });
+  }
+
+  const port = process.env.PORT || 5000;
+  const baseUrl = process.env.API_URL || `http://localhost:${port}`;
+  const fileUrl = `${baseUrl}/uploads/${req.file.filename}`;
+
+  return res.json({
+    url: fileUrl,
+    filename: req.file.filename
+  });
+});
 
 /**
  * GET /api/properties

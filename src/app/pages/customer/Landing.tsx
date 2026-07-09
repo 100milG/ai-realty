@@ -114,14 +114,17 @@ function pickRandomSuggestions(pool: string[], count: number): string[] {
 }
 
 export function CustomerLanding() {
-  const token = localStorage.getItem("token");
-  const searchPath = token ? "/customer/search" : "/search";
-  const aiChatPath = token ? "/customer/ai-chat" : "/ai-chat";
-
   const [properties, setProperties] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [aiQuery, setAiQuery] = useState("");
   const [visibleSuggestions, setVisibleSuggestions] = useState<string[]>([]);
+
+  const token = localStorage.getItem("token");
+  const searchPath = token ? "/customer/search" : "/search";
+  const aiChatPath = token ? "/customer/ai-chat" : "/login";
+  const aiChatState = token 
+    ? (aiQuery ? { initialQuery: aiQuery } : undefined) 
+    : { redirectAfterLogin: "/customer/ai-chat", initialQuery: aiQuery };
 
   useEffect(() => {
     const count = 2 + Math.floor(Math.random() * 2);
@@ -225,7 +228,7 @@ export function CustomerLanding() {
                       className="flex-1 px-3 py-3 bg-transparent outline-none text-sm w-full placeholder:text-muted-foreground"
                     />
                   </div>
-                  <Link to={aiChatPath} state={aiQuery ? { initialQuery: aiQuery } : undefined}>
+                  <Link to={aiChatPath} state={aiChatState}>
                     <Button size="lg" className="w-full sm:w-auto shrink-0 gap-2">
                       <Sparkles className="size-4" />
                       Ask AI

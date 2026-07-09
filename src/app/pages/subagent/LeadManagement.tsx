@@ -122,12 +122,12 @@ export function LeadManagement() {
   };
 
   return (
-    <div className="p-8 bg-gray-50 min-h-screen">
+    <div className="p-8 bg-background min-h-screen">
       <div className="max-w-7xl mx-auto space-y-6">
         {/* Header */}
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Lead Management</h1>
-          <p className="text-gray-600 mt-1">Track and manage your customer leads</p>
+          <h1 className="text-3xl font-bold text-foreground">Lead Management</h1>
+          <p className="text-muted-foreground mt-1">Track and manage your customer leads</p>
         </div>
 
         {/* Status Filter */}
@@ -146,7 +146,7 @@ export function LeadManagement() {
               className={`px-4 py-2 rounded-lg font-medium whitespace-nowrap transition-colors ${
                 filter === status.key
                   ? "bg-primary text-white"
-                  : "bg-white text-gray-700 hover:bg-gray-100 border border-gray-200"
+                  : "bg-card text-foreground hover:bg-secondary border border-border"
               }`}
             >
               {status.label} ({statusCounts[status.key as keyof typeof statusCounts]})
@@ -159,14 +159,14 @@ export function LeadManagement() {
           <div className={`lg:col-span-2 space-y-4 ${selectedLead ? "hidden lg:block" : "block"}`}>
             {/* Search */}
             <div className="flex items-center space-x-3">
-              <div className="flex-1 flex items-center bg-white border border-gray-200 rounded-lg px-4 py-2">
-                <Search className="size-5 text-gray-400 mr-2" />
+              <div className="flex-1 flex items-center bg-card border border-border rounded-lg px-4 py-2">
+                <Search className="size-5 text-muted-foreground mr-2" />
                 <input
                   type="text"
                   placeholder="Search leads by name or property..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="flex-1 bg-transparent outline-none"
+                  className="flex-1 bg-transparent outline-none text-foreground"
                 />
               </div>
               <Button variant="outline">
@@ -181,8 +181,8 @@ export function LeadManagement() {
                 <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary"></div>
               </div>
             ) : filteredLeads.length === 0 ? (
-              <div className="text-center py-20 bg-white rounded-xl border border-gray-200">
-                <p className="text-gray-500">No leads found.</p>
+              <div className="text-center py-20 bg-card rounded-xl border border-border">
+                <p className="text-muted-foreground">No leads found.</p>
               </div>
             ) : (
               <div className="space-y-3">
@@ -208,8 +208,8 @@ export function LeadManagement() {
                               {initials}
                             </div>
                             <div>
-                              <h3 className="font-semibold text-gray-900">{customerName}</h3>
-                              <p className="text-sm text-gray-600">{propertyTitle}</p>
+                              <h3 className="font-semibold text-foreground">{customerName}</h3>
+                              <p className="text-sm text-muted-foreground">{propertyTitle}</p>
                             </div>
                           </div>
                           <div className="flex items-center space-x-2">
@@ -228,11 +228,11 @@ export function LeadManagement() {
                           </div>
                         </div>
                         <div className="grid grid-cols-2 gap-3 text-sm">
-                          <div className="flex items-center text-gray-600">
+                          <div className="flex items-center text-muted-foreground">
                             <Clock className="size-4 mr-2" />
                             Created {new Date(lead.createdAt).toLocaleDateString()}
                           </div>
-                          <div className="flex items-center text-gray-600">
+                          <div className="flex items-center text-muted-foreground">
                             <MessageSquare className="size-4 mr-2" />
                             Status: {lead.status}
                           </div>
@@ -259,7 +259,7 @@ export function LeadManagement() {
                         >
                           ← Back
                         </button>
-                        <h2 className="text-xl font-semibold text-gray-900">Lead Details</h2>
+                        <h2 className="text-xl font-semibold text-foreground">Lead Details</h2>
                       </div>
                       <Badge
                         variant={
@@ -278,27 +278,27 @@ export function LeadManagement() {
                         {(selectedLead.customer?.name || "Customer").split(" ").map((n: string) => n[0]).join("")}
                       </div>
                       <div>
-                        <h3 className="font-semibold text-gray-900 text-lg">{selectedLead.customer?.name || "Customer"}</h3>
-                        <p className="text-sm text-gray-600">{selectedLead.property?.title || "Property"}</p>
+                        <h3 className="font-semibold text-foreground text-lg">{selectedLead.customer?.name || "Customer"}</h3>
+                        <p className="text-sm text-muted-foreground">{selectedLead.property?.title || "Property"}</p>
                       </div>
                     </div>
                   </div>
 
-                  <div className="space-y-3 pt-4 border-t border-gray-200">
-                    <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
-                      <Mail className="size-5 text-gray-400" />
+                  <div className="space-y-3 pt-4 border-t border-border">
+                    <div className="flex items-center space-x-3 p-3 bg-secondary/50 rounded-lg">
+                      <Mail className="size-5 text-muted-foreground" />
                       <div className="flex-1 min-w-0">
-                        <p className="text-xs text-gray-600">Email</p>
-                        <p className="text-sm text-gray-900 truncate">
+                        <p className="text-xs text-muted-foreground">Email</p>
+                        <p className="text-sm text-foreground truncate">
                           {selectedLead.isUnlocked ? (selectedLead.customer?.email || "No Email") : "••••••••••••"}
                         </p>
                       </div>
                     </div>
-                    <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
-                      <Phone className="size-5 text-gray-400" />
+                    <div className="flex items-center space-x-3 p-3 bg-secondary/50 rounded-lg">
+                      <Phone className="size-5 text-muted-foreground" />
                       <div className="flex-1 min-w-0">
-                        <p className="text-xs text-gray-600">Phone</p>
-                        <p className="text-sm text-gray-900">
+                        <p className="text-xs text-muted-foreground">Phone</p>
+                        <p className="text-sm text-foreground">
                           {selectedLead.isUnlocked ? (selectedLead.customer?.phone || "No Phone") : "••••••••••••"}
                         </p>
                       </div>
@@ -316,30 +316,30 @@ export function LeadManagement() {
                     )}
                   </div>
 
-                  <div className="pt-4 border-t border-gray-200">
-                    <h3 className="font-semibold text-gray-900 mb-3">Timeline</h3>
+                  <div className="pt-4 border-t border-border">
+                    <h3 className="font-semibold text-foreground mb-3">Timeline</h3>
                     <div className="space-y-3">
                       {getTimeline(selectedLead).map((item, index) => (
                         <div key={index} className="flex items-start space-x-3">
                           <div className="size-2 bg-primary rounded-full mt-2" />
                           <div className="flex-1">
-                            <p className="text-sm text-gray-900">{item.event}</p>
-                            <p className="text-xs text-gray-500">{item.time}</p>
+                            <p className="text-sm text-foreground">{item.event}</p>
+                            <p className="text-xs text-muted-foreground">{item.time}</p>
                           </div>
                         </div>
                       ))}
                     </div>
                   </div>
 
-                  <div className="space-y-4 pt-4 border-t border-gray-200">
-                    <h3 className="font-semibold text-gray-900">Actions</h3>
+                  <div className="space-y-4 pt-4 border-t border-border">
+                    <h3 className="font-semibold text-foreground">Actions</h3>
                     
                     <div className="flex flex-col gap-1">
-                      <label className="text-xs text-gray-500 font-medium">Update Status</label>
+                      <label className="text-xs text-muted-foreground font-medium">Update Status</label>
                       <select
                         value={selectedLead.status}
                         onChange={(e) => handleStatusChange(selectedLead.id, e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-sm"
+                        className="w-full px-3 py-2 border border-border rounded-lg bg-card text-foreground text-sm"
                       >
                         <option value="NEW">New</option>
                         <option value="CONTACTED">Contacted</option>
@@ -363,8 +363,8 @@ export function LeadManagement() {
             ) : (
               <Card>
                 <div className="text-center py-12">
-                  <MessageSquare className="size-12 text-gray-300 mx-auto mb-3" />
-                  <p className="text-gray-600">Select a lead to view details</p>
+                  <MessageSquare className="size-12 text-muted-foreground/30 mx-auto mb-3" />
+                  <p className="text-muted-foreground">Select a lead to view details</p>
                 </div>
               </Card>
             )}

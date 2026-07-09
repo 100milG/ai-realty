@@ -1,9 +1,77 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router";
 import { Upload, MapPin, IndianRupee, CheckCircle2, X, ArrowLeft } from "lucide-react";
 import { Button } from "../../components/Button";
 import { Card } from "../../components/Card";
 import { Badge } from "../../components/Badge";
+
+function formatIndianCurrency(numStr: string): string {
+  const cleanStr = numStr.replace(/\D/g, "");
+  if (!cleanStr) return "";
+  
+  const lastThree = cleanStr.substring(cleanStr.length - 3);
+  const otherNumbers = cleanStr.substring(0, cleanStr.length - 3);
+  if (otherNumbers !== '') {
+    return otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + "," + lastThree;
+  } else {
+    return lastThree;
+  }
+}
+
+function numberToWordsIndian(num: number): string {
+  if (isNaN(num) || num === 0) return "";
+  
+  const ones = [
+    "", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten",
+    "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"
+  ];
+  
+  const tens = [
+    "", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"
+  ];
+  
+  function helper(n: number): string {
+    let str = "";
+    if (n >= 100) {
+      str += ones[Math.floor(n / 100)] + " Hundred ";
+      n %= 100;
+    }
+    if (n >= 20) {
+      str += tens[Math.floor(n / 10)] + " ";
+      n %= 10;
+    }
+    if (n > 0) {
+      str += ones[n] + " ";
+    }
+    return str.trim();
+  }
+  
+  let result = "";
+  
+  if (num >= 10000000) {
+    const crore = Math.floor(num / 10000000);
+    result += helper(crore) + " Crore ";
+    num %= 10000000;
+  }
+  
+  if (num >= 100000) {
+    const lakh = Math.floor(num / 100000);
+    result += helper(lakh) + " Lakh ";
+    num %= 100000;
+  }
+  
+  if (num >= 1000) {
+    const thousand = Math.floor(num / 1000);
+    result += helper(thousand) + " Thousand ";
+    num %= 1000;
+  }
+  
+  if (num > 0) {
+    result += helper(num);
+  }
+  
+  return result.trim() + " Rupees Only";
+}
 
 const steps = ["Basic Info", "Details", "Amenities", "Images", "Review"];
 
@@ -64,7 +132,7 @@ export function AddProperty() {
               title: data.title || "",
               propertyType: data.propertyType || "VILLA",
               listingType: data.listingType || "SALE",
-              price: data.price ? data.price.toString() : "",
+              price: data.price ? formatIndianCurrency(data.price.toString()) : "",
               address: data.address || "",
               beds: data.beds ? data.beds.toString() : "",
               baths: data.baths ? data.baths.toString() : "",
@@ -89,12 +157,66 @@ export function AddProperty() {
     }
   }, [isEdit, id]);
 
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [isUploading, setIsUploading] = useState(false);
+
   const handleImageUpload = () => {
-    const mockImages = [
-      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800",
-      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800",
-    ];
-    setImages([...images, ...mockImages]);
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+
+    setIsUploading(true);
+    const token = localStorage.getItem("token");
+    const uploadedUrls: string[] = [];
+
+    try {
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i]!;
+        const formDataPayload = new FormData();
+        formDataPayload.append("file", file);
+
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/properties/upload`, {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`
+          },
+          body: formDataPayload
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          if (data.url) {
+            uploadedUrls.push(data.url);
+          }
+        } else {
+          const errData = await res.json();
+          alert(errData.error || `Failed to upload image ${file.name}`);
+        }
+      }
+
+      if (uploadedUrls.length > 0) {
+        setImages(prev => [...prev, ...uploadedUrls]);
+      }
+    } catch (err) {
+      console.error("Upload error:", err);
+      alert("An error occurred while uploading the images.");
+    } finally {
+      setIsUploading(false);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+    }
+  };
+
+  const handlePriceChange = (val: string) => {
+    const cleanVal = val.replace(/\D/g, "");
+    const formatted = formatIndianCurrency(cleanVal);
+    setFormData(prev => ({ ...prev, price: formatted }));
   };
 
   const handleAddressChange = async (val: string) => {
@@ -337,11 +459,16 @@ export function AddProperty() {
                     <input
                       type="text"
                       value={formData.price}
-                      onChange={(e) => setFormData({ ...formData, price: e.target.value })}
-                      placeholder="850000"
+                      onChange={(e) => handlePriceChange(e.target.value)}
+                      placeholder="e.g. 8,50,000"
                       className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg bg-white"
                     />
                   </div>
+                  {formData.price && (
+                    <p className="mt-2 text-xs font-semibold text-primary bg-primary/5 border border-primary/10 px-3 py-1.5 rounded-lg">
+                      {numberToWordsIndian(parseInt(formData.price.replace(/,/g, "")))}
+                    </p>
+                  )}
                 </div>
                 <div className="relative md:col-span-2">
                   <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -513,11 +640,30 @@ export function AddProperty() {
                   </div>
                 ))}
                 <button
+                  type="button"
+                  disabled={isUploading}
                   onClick={handleImageUpload}
-                  className="h-40 border-2 border-dashed border-gray-300 rounded-lg hover:border-primary hover:bg-blue-50 transition-colors flex flex-col items-center justify-center"
+                  className="h-40 border-2 border-dashed border-gray-300 rounded-lg hover:border-primary hover:bg-blue-50 transition-colors flex flex-col items-center justify-center disabled:opacity-50"
                 >
-                  <Upload className="size-8 text-gray-400 mb-2" />
-                  <span className="text-sm text-gray-600">Upload Images</span>
+                  <input
+                    type="file"
+                    multiple
+                    accept="image/*"
+                    className="hidden"
+                    ref={fileInputRef}
+                    onChange={handleFileChange}
+                  />
+                  {isUploading ? (
+                    <>
+                      <div className="animate-spin rounded-full h-8 w-8 border-2 border-primary border-t-transparent mb-2" />
+                      <span className="text-sm text-gray-600">Uploading...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Upload className="size-8 text-gray-400 mb-2" />
+                      <span className="text-sm text-gray-600">Upload Images</span>
+                    </>
+                  )}
                 </button>
               </div>
               <p className="text-sm text-gray-600">

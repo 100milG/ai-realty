@@ -1,6 +1,6 @@
 import { Router, Response } from "express";
 import { prisma } from "../db";
-import { authenticateToken, AuthRequest } from "../middlewares/auth";
+import { authenticateToken, authorizeRoles, AuthRequest } from "../middlewares/auth";
 import { LeadStatus } from "@prisma/client";
 
 const router = Router();
@@ -66,7 +66,7 @@ router.get("/", authenticateToken, async (req: AuthRequest, res: Response) => {
  * POST /api/leads
  * Create a new lead for a property (Restricted to CUSTOMER)
  */
-router.post("/", authenticateToken, async (req: AuthRequest, res: Response) => {
+router.post("/", authenticateToken, authorizeRoles("CUSTOMER"), async (req: AuthRequest, res: Response) => {
   const { propertyId, subagentId } = req.body;
   const customerId = req.user!.id;
 
@@ -139,7 +139,7 @@ router.post("/", authenticateToken, async (req: AuthRequest, res: Response) => {
  * PUT /api/leads/:id/unlock
  * Unlock a lead (Agent pays to unlock contact info - Restricted to SUBAGENT)
  */
-router.put("/:id/unlock", authenticateToken, async (req: AuthRequest, res: Response) => {
+router.put("/:id/unlock", authenticateToken, authorizeRoles("SUBAGENT", "ADMIN"), async (req: AuthRequest, res: Response) => {
   const { id } = req.params;
 
   try {
@@ -174,7 +174,7 @@ router.put("/:id/unlock", authenticateToken, async (req: AuthRequest, res: Respo
  * PUT /api/leads/:id/status
  * Update lead status (Restricted to SUBAGENT or ADMIN)
  */
-router.put("/:id/status", authenticateToken, async (req: AuthRequest, res: Response) => {
+router.put("/:id/status", authenticateToken, authorizeRoles("SUBAGENT", "ADMIN"), async (req: AuthRequest, res: Response) => {
   const { id } = req.params;
   const { status } = req.body;
 

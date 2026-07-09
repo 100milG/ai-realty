@@ -47,3 +47,6 @@ HOSTING_GUIDE.md
 # Whitelist environment templates
 !.env.example
 !server/.env.example
+
+# Server local uploads
+/server/uploads/

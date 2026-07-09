@@ -1,8 +1,23 @@
 import { Router, Response } from "express";
 import { prisma } from "../db";
 import { authenticateToken, authorizeRoles, AuthRequest } from "../middlewares/auth";
+import { handleChat, getSessionState } from "../modules/conversation/chat.controller";
+import { perIpRateLimit, globalDailyCap } from "../middlewares/rate.limiter";
 
 const router = Router();
+
+/**
+ * POST /api/ai/chat
+ * Main chatbot conversation endpoint
+ */
+router.post("/chat", authenticateToken, perIpRateLimit, globalDailyCap, handleChat);
+
+/**
+ * GET /api/ai/chat/:sessionId
+ * Retrieve chat session state
+ */
+router.get("/chat/:sessionId", authenticateToken, perIpRateLimit, getSessionState);
+
 
 /**
  * GET /api/ai/reports
