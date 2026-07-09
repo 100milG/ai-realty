@@ -4,6 +4,7 @@ import { Building2, Plus, Edit2, Trash2, Eye, Search, Filter } from "lucide-reac
 import { Card } from "../../components/Card";
 import { Badge } from "../../components/Badge";
 import { Button } from "../../components/Button";
+import { ConfirmationModal } from "../../components/ConfirmationModal";
 
 export function PropertyManagement() {
   const navigate = useNavigate();
@@ -50,10 +51,17 @@ export function PropertyManagement() {
     loadProperties();
   }, [token, currentUserId]);
 
-  const handleDeleteProperty = async (id: string) => {
-    if (!window.confirm("Are you sure you want to permanently delete this property listing?")) {
-      return;
-    }
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [propertyToDelete, setPropertyToDelete] = useState<string | null>(null);
+
+  const confirmDeleteProperty = (id: string) => {
+    setPropertyToDelete(id);
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleDeleteProperty = async () => {
+    if (!propertyToDelete) return;
+    const id = propertyToDelete;
 
     try {
       const res = await fetch(`${import.meta.env.VITE_API_URL}/properties/${id}`, {
@@ -65,7 +73,6 @@ export function PropertyManagement() {
 
       if (res.ok) {
         setProperties(prev => prev.filter(p => p.id !== id));
-        alert("Property listing deleted successfully!");
       } else {
         const data = await res.json();
         alert(data.error || "Failed to delete property listing.");
@@ -73,6 +80,9 @@ export function PropertyManagement() {
     } catch (err) {
       console.error("Error deleting property:", err);
       alert("Something went wrong. Please try again.");
+    } finally {
+      setIsDeleteModalOpen(false);
+      setPropertyToDelete(null);
     }
   };
 
@@ -227,8 +237,8 @@ export function PropertyManagement() {
                               </button>
                             </Link>
                             <button
-                              onClick={() => handleDeleteProperty(property.id)}
-                              className="p-2 text-muted-foreground hover:text-red-600 hover:bg-red-500/10 rounded-lg transition-colors cursor-pointer"
+                              onClick={() => confirmDeleteProperty(property.id)}
+                              className="p-2 text-muted-foreground hover:text-white hover:bg-destructive active:bg-destructive-hover rounded-lg transition-colors cursor-pointer"
                               title="Delete Property"
                             >
                               <Trash2 className="size-4" />
@@ -244,6 +254,18 @@ export function PropertyManagement() {
           </div>
         )}
       </div>
+
+      <ConfirmationModal
+        isOpen={isDeleteModalOpen}
+        title="Delete Property Listing"
+        message="Are you sure you want to permanently delete this property listing? This action cannot be undone."
+        confirmLabel="Delete"
+        onConfirm={handleDeleteProperty}
+        onCancel={() => {
+          setIsDeleteModalOpen(false);
+          setPropertyToDelete(null);
+        }}
+      />
     </div>
   );
 }

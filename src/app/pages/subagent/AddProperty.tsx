@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router";
 import { Upload, MapPin, IndianRupee, CheckCircle2, X, ArrowLeft } from "lucide-react";
 import { Button } from "../../components/Button";
@@ -157,12 +157,60 @@ export function AddProperty() {
     }
   }, [isEdit, id]);
 
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [isUploading, setIsUploading] = useState(false);
+
   const handleImageUpload = () => {
-    const mockImages = [
-      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800",
-      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800",
-    ];
-    setImages([...images, ...mockImages]);
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+
+    setIsUploading(true);
+    const token = localStorage.getItem("token");
+    const uploadedUrls: string[] = [];
+
+    try {
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i]!;
+        const formDataPayload = new FormData();
+        formDataPayload.append("file", file);
+
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/properties/upload`, {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`
+          },
+          body: formDataPayload
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          if (data.url) {
+            uploadedUrls.push(data.url);
+          }
+        } else {
+          const errData = await res.json();
+          alert(errData.error || `Failed to upload image ${file.name}`);
+        }
+      }
+
+      if (uploadedUrls.length > 0) {
+        setImages(prev => [...prev, ...uploadedUrls]);
+      }
+    } catch (err) {
+      console.error("Upload error:", err);
+      alert("An error occurred while uploading the images.");
+    } finally {
+      setIsUploading(false);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+    }
   };
 
   const handlePriceChange = (val: string) => {
@@ -592,11 +640,30 @@ export function AddProperty() {
                   </div>
                 ))}
                 <button
+                  type="button"
+                  disabled={isUploading}
                   onClick={handleImageUpload}
-                  className="h-40 border-2 border-dashed border-gray-300 rounded-lg hover:border-primary hover:bg-blue-50 transition-colors flex flex-col items-center justify-center"
+                  className="h-40 border-2 border-dashed border-gray-300 rounded-lg hover:border-primary hover:bg-blue-50 transition-colors flex flex-col items-center justify-center disabled:opacity-50"
                 >
-                  <Upload className="size-8 text-gray-400 mb-2" />
-                  <span className="text-sm text-gray-600">Upload Images</span>
+                  <input
+                    type="file"
+                    multiple
+                    accept="image/*"
+                    className="hidden"
+                    ref={fileInputRef}
+                    onChange={handleFileChange}
+                  />
+                  {isUploading ? (
+                    <>
+                      <div className="animate-spin rounded-full h-8 w-8 border-2 border-primary border-t-transparent mb-2" />
+                      <span className="text-sm text-gray-600">Uploading...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Upload className="size-8 text-gray-400 mb-2" />
+                      <span className="text-sm text-gray-600">Upload Images</span>
+                    </>
+                  )}
                 </button>
               </div>
               <p className="text-sm text-gray-600">

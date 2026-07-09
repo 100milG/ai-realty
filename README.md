@@ -111,3 +111,10 @@ The application is configured to build and deploy dynamically on git push:
 ## 📝 Setup and Local Development
 
 For step-by-step instructions on setting up your local PostgreSQL database, configuring your variables, running database seeds, and starting the servers, please refer to the [Setup Guide](file:///d:/immo/ai-realty/SETUP.md).
+
+# Pending Tasks
+
+- [ ] Some dashboard values and display is currently harcoded
+- [ ] Search properties page has filters working partially
+- [ ] Preferences are not being updated by AI
+- [ ] Agent scheduling is yet to be implemented

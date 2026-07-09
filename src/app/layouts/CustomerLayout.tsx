@@ -14,6 +14,7 @@ import {
   LogOut,
 } from "lucide-react";
 import { ThemeToggle } from "../components/ThemeToggle";
+import { ConfirmationModal } from "../components/ConfirmationModal";
 
 export function CustomerLayout() {
   const location = useLocation();
@@ -21,6 +22,7 @@ export function CustomerLayout() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [portalDropdownOpen, setPortalDropdownOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const userJson = localStorage.getItem("user");
@@ -33,9 +35,14 @@ export function CustomerLayout() {
   }, []);
 
   const handleLogout = () => {
+    setIsLogoutModalOpen(true);
+  };
+
+  const confirmLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     setPortalDropdownOpen(false);
+    setIsLogoutModalOpen(false);
     navigate("/");
   };
 
@@ -160,7 +167,7 @@ export function CustomerLayout() {
                       <div className="border-t border-border mt-1 pt-1">
                         <button
                           onClick={handleLogout}
-                          className="flex w-full items-center gap-3 px-4 py-2.5 text-sm text-destructive hover:bg-destructive/10 transition-colors cursor-pointer"
+                          className="flex w-full items-center gap-3 px-4 py-2.5 text-sm text-red-600 hover:bg-red-600 hover:text-white active:bg-red-700 transition-colors cursor-pointer"
                         >
                           <LogOut className="size-4" />
                           <span>Logout</span>
@@ -249,7 +256,7 @@ export function CustomerLayout() {
                     handleLogout();
                     setMobileMenuOpen(false);
                   }}
-                  className="flex w-full items-center gap-2 px-3 py-2.5 rounded-lg text-destructive hover:bg-destructive/10 cursor-pointer mt-1"
+                  className="flex w-full items-center gap-2 px-3 py-2.5 rounded-lg text-red-600 hover:bg-red-600 hover:text-white active:bg-red-700 transition-colors cursor-pointer mt-1"
                 >
                   <LogOut className="size-5" />
                   <span>Logout</span>
@@ -282,6 +289,15 @@ export function CustomerLayout() {
           <MessageSquare className="size-6 text-white group-hover:scale-110 transition-transform" />
         </Link>
       )}
+
+      <ConfirmationModal
+        isOpen={isLogoutModalOpen}
+        title="Log Out"
+        message="Are you sure you want to log out of your account?"
+        confirmText="Log Out"
+        onConfirm={confirmLogout}
+        onCancel={() => setIsLogoutModalOpen(false)}
+      />
     </div>
   );
 }

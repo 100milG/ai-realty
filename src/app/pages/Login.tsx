@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router";
+import { useNavigate, Link, useLocation } from "react-router";
 import { Mail, Lock, ArrowRight, User, Shield, Building2, Eye, EyeOff, Home } from "lucide-react";
 import { Button } from "../components/Button";
 import { ThemeToggle } from "../components/ThemeToggle";
@@ -7,6 +7,8 @@ import { AuthBackButton } from "../components/AuthBackButton";
 
 export function Login() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const state = location.state as { redirectAfterLogin?: string; initialQuery?: string } | null;
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -48,8 +50,10 @@ export function Login() {
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
 
-      // Redirect user to the corresponding dashboard based on their role
-      if (data.user.role === "ADMIN") {
+      // Redirect user to the corresponding dashboard based on their role or pre-login state
+      if (state?.redirectAfterLogin) {
+        navigate(state.redirectAfterLogin, { state: { initialQuery: state.initialQuery } });
+      } else if (data.user.role === "ADMIN") {
         navigate("/admin/dashboard");
       } else if (data.user.role === "SUBAGENT") {
         navigate("/subagent/dashboard");
@@ -66,11 +70,53 @@ export function Login() {
     }
   };
 
-  // Helper helper to quickly load seeded mock profiles for testing
-  const quickLogin = (roleEmail: string) => {
-    setEmail(roleEmail);
-    setPassword("password123");
+  // Helper helper to quickly load seeded mock profiles and login directly
+  const quickLogin = async (roleEmail: string, rolePassword = "password123") => {
     setError("");
+    setIsLoading(true);
+    try {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/auth/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: roleEmail, password: rolePassword })
+      });
+
+      // #region agent log
+      fetch('http://127.0.0.1:7872/ingest/1292bd7c-2fa2-46d3-90f7-712f4415e2c9',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'195762'},body:JSON.stringify({sessionId:'195762',location:'Login.tsx:fetch-complete',message:'Fetch completed',data:{status:res.status,ok:res.ok,apiUrl:import.meta.env.VITE_API_URL},timestamp:Date.now(),hypothesisId:'H2-H3',runId:'post-fix'})}).catch(()=>{});
+      // #endregion
+
+      const data = await res.json();
+
+      // #region agent log
+      fetch('http://127.0.0.1:7872/ingest/1292bd7c-2fa2-46d3-90f7-712f4415e2c9',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'195762'},body:JSON.stringify({sessionId:'195762',location:'Login.tsx:parse-complete',message:'Response parsed',data:{hasToken:!!data?.token,hasUser:!!data?.user,role:data?.user?.role},timestamp:Date.now(),hypothesisId:'H4',runId:'post-fix'})}).catch(()=>{});
+      // #endregion
+
+      if (!res.ok) {
+        throw new Error(data.error || "Login failed. Please check credentials.");
+      }
+
+      // Save user session details in browser localStorage
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data.user));
+
+      // Redirect user to the corresponding dashboard based on their role or pre-login state
+      if (state?.redirectAfterLogin) {
+        navigate(state.redirectAfterLogin, { state: { initialQuery: state.initialQuery } });
+      } else if (data.user.role === "ADMIN") {
+        navigate("/admin/dashboard");
+      } else if (data.user.role === "SUBAGENT") {
+        navigate("/subagent/dashboard");
+      } else {
+        navigate("/customer/dashboard");
+      }
+    } catch (err: any) {
+      // #region agent log
+      fetch('http://127.0.0.1:7872/ingest/1292bd7c-2fa2-46d3-90f7-712f4415e2c9',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'195762'},body:JSON.stringify({sessionId:'195762',location:'Login.tsx:catch',message:'Login error caught',data:{name:err?.name,message:err?.message,hasResponseVar:typeof (globalThis as any).response},timestamp:Date.now(),hypothesisId:'H1'})}).catch(()=>{});
+      // #endregion
+      setError(err.message || "Something went wrong.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -108,6 +154,13 @@ export function Login() {
           {error && (
             <div className="mb-6 bg-destructive/10 border border-destructive/30 text-destructive px-4 py-3 rounded-xl text-sm">
               {error}
+            </div>
+          )}
+
+          {isLoading && (
+            <div className="flex justify-center items-center py-4 space-x-2 mb-6">
+              <div className="animate-spin rounded-full h-5 w-5 border-2 border-primary border-t-transparent" />
+              <span className="text-sm text-muted-foreground">Authenticating...</span>
             </div>
           )}
 
@@ -168,42 +221,6 @@ export function Login() {
               {!isLoading && <ArrowRight className="size-4 ml-2" />}
             </Button>
           </form>
-
-          {/* Quick Login Section for Developer Evaluation */}
-          <div className="mt-8 border-t border-border pt-6">
-            <span className="block text-center text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-4">
-              Quick Test Accounts (Seeded)
-            </span>
-            <div className="grid grid-cols-3 gap-2">
-              <button
-                type="button"
-                onClick={() => quickLogin("priya@example.com")}
-                className="flex flex-col items-center justify-center p-3 bg-secondary border border-border rounded-xl hover:bg-muted transition-all group cursor-pointer"
-              >
-                <User className="size-5 text-muted-foreground group-hover:text-primary transition-colors" />
-                <span className="text-[10px] font-medium text-foreground mt-1">Customer</span>
-                <span className="text-[8px] text-muted-foreground">Priya</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => quickLogin("raj@example.com")}
-                className="flex flex-col items-center justify-center p-3 bg-secondary border border-border rounded-xl hover:bg-muted transition-all group cursor-pointer"
-              >
-                <Building2 className="size-5 text-muted-foreground group-hover:text-primary transition-colors" />
-                <span className="text-[10px] font-medium text-foreground mt-1">Subagent</span>
-                <span className="text-[8px] text-muted-foreground">Raj</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => quickLogin("admin@example.com")}
-                className="flex flex-col items-center justify-center p-3 bg-secondary border border-border rounded-xl hover:bg-muted transition-all group cursor-pointer"
-              >
-                <Shield className="size-5 text-muted-foreground group-hover:text-primary transition-colors" />
-                <span className="text-[10px] font-medium text-foreground mt-1">Admin</span>
-                <span className="text-[8px] text-muted-foreground">System</span>
-              </button>
-            </div>
-          </div>
         </div>
       </div>
     </div>

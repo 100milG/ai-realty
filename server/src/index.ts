@@ -1,6 +1,8 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import path from "path";
+import fs from "fs";
 import apiRouter from "./routes";
 
 // Load environment variables from .env file
@@ -17,6 +19,15 @@ app.use(cors({
 
 // Express middleware to parse incoming JSON payloads
 app.use(express.json());
+
+// Ensure uploads directory exists dynamically
+const uploadsDir = path.join(__dirname, "../uploads");
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir, { recursive: true });
+}
+
+// Serve uploaded files statically
+app.use("/uploads", express.static(uploadsDir));
 
 // Register all API routes under /api
 app.use("/api", apiRouter);

@@ -19,11 +19,13 @@ import {
 } from "lucide-react";
 import { Badge } from "../components/Badge";
 import { ThemeToggle } from "../components/ThemeToggle";
+import { ConfirmationModal } from "../components/ConfirmationModal";
 
 export function DashboardLayout() {
   const location = useLocation();
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
 
   const token = localStorage.getItem("token");
   const user = localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")!) : null;
@@ -46,8 +48,13 @@ export function DashboardLayout() {
   }, [token, userRole, location.pathname]);
 
   const handleLogout = () => {
+    setIsLogoutModalOpen(true);
+  };
+
+  const confirmLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
+    setIsLogoutModalOpen(false);
     navigate("/login");
   };
 
@@ -155,7 +162,7 @@ export function DashboardLayout() {
           </div>
           <button
             onClick={handleLogout}
-            className="flex w-full items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-muted-foreground hover:bg-sidebar-accent hover:text-destructive transition-colors cursor-pointer"
+            className="flex w-full items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-red-600 hover:bg-red-600 hover:text-white active:bg-red-700 transition-colors cursor-pointer"
           >
             <LogOut className="size-4" />
             <span>Logout</span>
@@ -188,6 +195,15 @@ export function DashboardLayout() {
           <Outlet />
         </main>
       </div>
+
+      <ConfirmationModal
+        isOpen={isLogoutModalOpen}
+        title="Log Out"
+        message="Are you sure you want to log out of your account?"
+        confirmText="Log Out"
+        onConfirm={confirmLogout}
+        onCancel={() => setIsLogoutModalOpen(false)}
+      />
     </div>
   );
 }

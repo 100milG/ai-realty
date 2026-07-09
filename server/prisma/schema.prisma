@@ -151,6 +151,11 @@ model Property {
   baths           Int?
   sqft            Float?
   yearBuilt       Int?
+  balcony         Int?
+  parking         Int?
+  furnishedStatus String?
+  isResale        Boolean           @default(false)
+  priceSqft       Float?
   approvedBy      String?
   approvedAt      DateTime?
   agents          PropertyAgent[]

@@ -12,6 +12,8 @@ export function PropertySearch() {
   const [showFilters, setShowFilters] = useState(false);
   const [priceRange, setPriceRange] = useState<string>("all");
   const [bedrooms, setBedrooms] = useState<string>("all");
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const pageSize = 25;
 
   const [searchQuery, setSearchQuery] = useState("");
   const [suggestions, setSuggestions] = useState<any[]>([]);
@@ -109,6 +111,7 @@ export function PropertySearch() {
     }
 
     setFilteredProperties(result);
+    setCurrentPage(1);
   }, [allProperties, selectedLocation, searchQuery, priceRange, bedrooms]);
 
   const handleSearchChange = async (val: string) => {
@@ -327,56 +330,93 @@ export function PropertySearch() {
 
           {/* Properties Grid */}
           <div className="lg:col-span-3">
-            <div className="flex items-center justify-between mb-6">
-              <p className="text-muted-foreground text-sm">{filteredProperties.length} properties found</p>
-              <Button variant="ghost" size="sm">
-                <MapPin className="size-4 mr-2" />
-                Map View
-              </Button>
-            </div>
+            {(() => {
+              const totalPages = Math.ceil(filteredProperties.length / pageSize);
+              const startIndex = (currentPage - 1) * pageSize;
+              const endIndex = startIndex + pageSize;
+              const paginatedProperties = filteredProperties.slice(startIndex, endIndex);
 
-            {loading ? (
-              <div className="flex justify-center items-center py-20">
-                <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary"></div>
-              </div>
-            ) : filteredProperties.length === 0 ? (
-              <div className="text-center py-20 bg-card rounded-xl border border-border shadow-soft">
-                <p className="text-muted-foreground">No active properties found matching your search.</p>
-              </div>
-            ) : (
-              <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-6">
-                {filteredProperties.map((property: any) => {
-                  const imageUrl = property.media && property.media[0] ? property.media[0].url : "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800";
-                  const formattedPrice = formatPriceCompact(property.price);
-                  const propertyLocation = property.address || (property.locality ? `${property.locality.name}, ${property.locality.city}` : "Unknown Locality");
-                  
-                  return (
-                    <PropertyCard
-                      key={property.id}
-                      id={property.id}
-                      image={imageUrl}
-                      price={formattedPrice}
-                      title={property.title}
-                      location={propertyLocation}
-                      beds={property.beds || 0}
-                      baths={property.baths || 0}
-                      sqft={property.sqft || 0}
-                      aiScore={92} 
-                      aiReason="Matches your search preferences."
-                    />
-                  );
-                })}
-              </div>
-            )}
+              return (
+                <>
+                  <div className="flex items-center justify-between mb-6">
+                    <p className="text-muted-foreground text-sm">
+                      Showing {filteredProperties.length > 0 ? startIndex + 1 : 0}-
+                      {Math.min(endIndex, filteredProperties.length)} of {filteredProperties.length} properties found
+                    </p>
+                    <Button variant="ghost" size="sm">
+                      <MapPin className="size-4 mr-2" />
+                      Map View
+                    </Button>
+                  </div>
 
-            {/* Pagination */}
-            <div className="flex flex-wrap justify-center mt-8 gap-2">
-              <Button variant="outline" size="sm">Previous</Button>
-              <Button variant="outline" size="sm">1</Button>
-              <Button size="sm">2</Button>
-              <Button variant="outline" size="sm">3</Button>
-              <Button variant="outline" size="sm">Next</Button>
-            </div>
+                  {loading ? (
+                    <div className="flex justify-center items-center py-20">
+                      <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary"></div>
+                    </div>
+                  ) : filteredProperties.length === 0 ? (
+                    <div className="text-center py-20 bg-card rounded-xl border border-border shadow-soft">
+                      <p className="text-muted-foreground">No active properties found matching your search.</p>
+                    </div>
+                  ) : (
+                    <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-6">
+                      {paginatedProperties.map((property: any) => {
+                        const imageUrl = property.media && property.media[0] ? property.media[0].url : "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800";
+                        const formattedPrice = formatPriceCompact(property.price);
+                        const propertyLocation = property.address || (property.locality ? `${property.locality.name}, ${property.locality.city}` : "Unknown Locality");
+                        
+                        return (
+                          <PropertyCard
+                            key={property.id}
+                            id={property.id}
+                            image={imageUrl}
+                            price={formattedPrice}
+                            title={property.title}
+                            location={propertyLocation}
+                            beds={property.beds || 0}
+                            baths={property.baths || 0}
+                            sqft={property.sqft || 0}
+                            aiScore={92} 
+                            aiReason="Matches your search preferences."
+                          />
+                        );
+                      })}
+                    </div>
+                  )}
+
+                  {/* Pagination */}
+                  {totalPages > 1 && (
+                    <div className="flex flex-wrap justify-center mt-8 gap-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        disabled={currentPage <= 1}
+                        onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                      >
+                        Previous
+                      </Button>
+                      
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        disabled={currentPage >= totalPages}
+                        onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                      >
+                        Next
+                      </Button>
+                      
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        disabled={currentPage + 2 > totalPages}
+                        onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 2))}
+                      >
+                        Skip 2 Pages
+                      </Button>
+                    </div>
+                  )}
+                </>
+              );
+            })()}
           </div>
         </div>
       </div>

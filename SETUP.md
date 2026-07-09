@@ -31,14 +31,16 @@ Ensure you have the following installed on your machine:
     ```bash
     cp .env.example .env
     ```
-3.  Open the newly created `server/.env` and update the connection URL and JWT secret:
+3.  Open the newly created `server/.env` and update the database parameters, JWT secret, and Gemini API key:
     ```env
     PORT=5000
     DATABASE_URL="postgresql://postgres:YOUR_PG_PASSWORD@localhost:5432/ai_realty?schema=public"
     JWT_SECRET="generate_a_secure_random_string_here"
+    GEMINI_API_KEY="YOUR_GEMINI_API_KEY"
     ```
     > [!IMPORTANT]
-    > Replace `YOUR_PG_PASSWORD` with the actual password for your local PostgreSQL `postgres` user.
+    > *   Replace `YOUR_PG_PASSWORD` with the actual password for your local PostgreSQL `postgres` user.
+    > *   Replace `YOUR_GEMINI_API_KEY` with a valid Google Gemini API Key from Google AI Studio to enable the AI Assistant.
 
 ### Step 3: Backend Node Dependencies & Migration
 1.  Install backend packages:
@@ -96,10 +98,10 @@ When you access the login screen, you can click the quick-login shortcut buttons
 
 | Role | Email Address | Password | Functionality |
 | :--- | :--- | :--- | :--- |
-| **Customer** | `priya@example.com` | `password123` | Search properties, save favorites, chat with agents & AI |
-| **Subagent** | `raj@example.com` | `password123` | Post/update listings, manage leads, update profiles |
-| **Admin** | `admin@example.com` | `password123` | Moderate properties, verify agents, audit chat logs |
-| **Testing Subagent** | `agent_testing@example.com` | `password123` | Upload KYC documents, check geocoding |
+| **Customer** | `priya@example.com` | `Priya_RealtySafe_9971` | Search properties, save favorites, chat with agents & AI |
+| **Subagent** | `raj@example.com` | `AgentAdmin_SecurePass_2026` | Post/update listings, manage leads, update profiles |
+| **Admin** | `admin@example.com` | `AgentAdmin_SecurePass_2026` | Moderate properties, verify agents, audit chat logs |
+| **Testing Subagent** | `agent_testing@example.com` | `AgentAdmin_SecurePass_2026` | Upload KYC documents, check geocoding |
 
 ---
 
